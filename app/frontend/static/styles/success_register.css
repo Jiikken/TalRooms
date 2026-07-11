@@ -1,0 +1,387 @@
+/* styles/success.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #f4f7fc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 80px;
+}
+
+/* ----- СТАТИЧНАЯ ШАПКА (поверх всего) ----- */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 20, 40, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  z-index: 999;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  background: #2a7de1;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  box-shadow: 0 6px 12px rgba(42, 125, 225, 0.25);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: #0b1e3a;
+}
+
+.brand span {
+  color: #2a7de1;
+  font-weight: 300;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid #d0dbe8;
+  padding: 8px 18px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1f2a44;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.btn-outline i {
+  color: #2a7de1;
+  font-size: 1rem;
+}
+
+.btn-outline:hover {
+  background: #2a7de1;
+  border-color: #2a7de1;
+  color: white;
+  box-shadow: 0 6px 14px rgba(42, 125, 225, 0.25);
+}
+
+.btn-outline:hover i {
+  color: white;
+}
+
+/* ----- КОНТЕЙНЕР УСПЕХА ----- */
+.success-container {
+  max-width: 520px;
+  width: 100%;
+  padding: 0 1.5rem;
+  margin-top: 2rem;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.success-card {
+  background: white;
+  border-radius: 32px;
+  padding: 3rem 2.5rem;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.success-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.success-icon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2a9d8f, #2a7de1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 44px;
+  color: white;
+  box-shadow: 0 12px 30px rgba(42, 125, 225, 0.3);
+  animation: bounceIn 0.8s ease-out;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.success-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0b1e3a;
+  margin-bottom: 0.5rem;
+}
+
+.success-header p {
+  color: #5b6f89;
+  font-size: 1rem;
+}
+
+/* ----- ИНФОРМАЦИЯ ОБ АККАУНТЕ ----- */
+.account-info {
+  background: #f8fafc;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border: 1px solid #eef2f7;
+}
+
+.account-info h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6a7e99;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.account-info h3 i {
+  color: #2a7de1;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #1f2a44;
+  width: 110px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-label i {
+  color: #2a7de1;
+  width: 18px;
+}
+
+.info-value {
+  color: #0b1e3a;
+  font-size: 0.95rem;
+  flex: 1;
+  word-break: break-all;
+}
+
+.info-value .badge {
+  display: inline-block;
+  background: #e2f0e8;
+  color: #1b6e4b;
+  padding: 2px 12px;
+  border-radius: 40px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ----- КНОПКИ ДЕЙСТВИЙ ----- */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 1.5rem;
+}
+
+.btn-primary {
+  flex: 1;
+  background: #2a7de1;
+  border: none;
+  padding: 14px;
+  border-radius: 40px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 6px 20px rgba(42, 125, 225, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: "Inter", sans-serif;
+  text-decoration: none;
+}
+
+.btn-primary i {
+  color: white;
+  font-size: 1.1rem;
+}
+
+.btn-primary:hover {
+  background: #1a5fc7;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(42, 125, 225, 0.35);
+}
+
+.btn-secondary {
+  flex: 1;
+  background: white;
+  border: 1.5px solid #dae2ed;
+  padding: 14px;
+  border-radius: 40px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1f2a44;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: "Inter", sans-serif;
+  text-decoration: none;
+}
+
+.btn-secondary i {
+  color: #2a7de1;
+  font-size: 1.1rem;
+}
+
+.btn-secondary:hover {
+  background: #f4f7fc;
+  border-color: #b0c4db;
+  transform: translateY(-2px);
+}
+
+/* ----- ПОДВАЛ ----- */
+.footer-note {
+  margin-top: 3rem;
+  padding: 1.5rem 0 2rem;
+  text-align: center;
+  color: #6a7e99;
+  font-size: 0.9rem;
+  border-top: 1px solid #e2eaf2;
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.footer-note span i {
+  margin-right: 6px;
+  color: #2a7de1;
+}
+
+/* ----- АДАПТИВ ----- */
+@media (max-width: 680px) {
+  .header {
+    padding: 0 1.2rem;
+  }
+  .brand {
+    font-size: 1.2rem;
+  }
+  .header-right .btn-outline span {
+    display: none;
+  }
+  .header-right .btn-outline {
+    padding: 8px 14px;
+  }
+
+  .success-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .success-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .success-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 34px;
+  }
+
+  .info-label {
+    width: 80px;
+    font-size: 0.8rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 12px;
+  }
+}

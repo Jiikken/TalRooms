@@ -1,0 +1,142 @@
+/* styles/flash.css */
+/* ----- FLASH-СООБЩЕНИЯ (поверх всего) ----- */
+.flash-container {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  z-index: 9999;
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.flash-message {
+  pointer-events: auto;
+  background: white;
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 12px 40px rgba(0, 20, 40, 0.15);
+  border-left: 4px solid #2a7de1;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  animation: slideInRight 0.4s ease-out;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.flash-message.hiding {
+  animation: slideOutRight 0.3s ease-in forwards;
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.flash-icon {
+  font-size: 1.3rem;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+
+.flash-content {
+  flex: 1;
+}
+
+.flash-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0b1e3a;
+  margin-bottom: 2px;
+}
+
+.flash-text {
+  font-size: 0.9rem;
+  color: #365073;
+  line-height: 1.4;
+}
+
+.flash-close {
+  background: none;
+  border: none;
+  color: #8a9bb5;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px 4px 0 0;
+  transition: 0.2s;
+  flex-shrink: 0;
+}
+
+.flash-close:hover {
+  color: #0b1e3a;
+  transform: rotate(90deg);
+}
+
+/* Типы сообщений */
+.flash-message.success {
+  border-left-color: #2a9d8f;
+}
+
+.flash-message.success .flash-icon {
+  color: #2a9d8f;
+}
+
+.flash-message.error {
+  border-left-color: #e76f51;
+}
+
+.flash-message.error .flash-icon {
+  color: #e76f51;
+}
+
+.flash-message.warning {
+  border-left-color: #f4a261;
+}
+
+.flash-message.warning .flash-icon {
+  color: #f4a261;
+}
+
+.flash-message.info {
+  border-left-color: #2a7de1;
+}
+
+.flash-message.info .flash-icon {
+  color: #2a7de1;
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 680px) {
+  .flash-container {
+    top: 80px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+  
+  .flash-message {
+    padding: 14px 16px;
+  }
+}

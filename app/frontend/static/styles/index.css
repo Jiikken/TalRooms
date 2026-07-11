@@ -1,0 +1,352 @@
+/* styles/index.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #f4f7fc;
+  padding-top: 80px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ----- СТАТИЧНАЯ ШАПКА (поверх всего) ----- */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 20, 40, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  z-index: 999;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  background: #2a7de1;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  box-shadow: 0 6px 12px rgba(42, 125, 225, 0.25);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: #0b1e3a;
+}
+
+.brand span {
+  color: #2a7de1;
+  font-weight: 300;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* кнопка входа + доп. элементы */
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid #d0dbe8;
+  padding: 8px 18px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1f2a44;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.btn-outline i {
+  color: #2a7de1;
+  font-size: 1rem;
+}
+
+.btn-outline:hover {
+  background: #2a7de1;
+  border-color: #2a7de1;
+  color: white;
+  box-shadow: 0 6px 14px rgba(42, 125, 225, 0.25);
+}
+
+.btn-outline:hover i {
+  color: white;
+}
+
+.btn-primary {
+  background: #2a7de1;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 6px 14px rgba(42, 125, 225, 0.25);
+}
+
+.btn-primary i {
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1a5fc7;
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(42, 125, 225, 0.35);
+}
+
+.header-badge {
+  background: #eef3fa;
+  border-radius: 30px;
+  padding: 6px 16px 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1f2a44;
+  border: 1px solid #e2eaf2;
+}
+
+.header-badge i {
+  color: #f5b342;
+  font-size: 1rem;
+}
+
+.divider {
+  width: 1px;
+  height: 28px;
+  background: #dae2ed;
+  margin: 0 4px;
+}
+
+/* ----- ОСНОВНОЙ КОНТЕНТ (карточки комнат) ----- */
+.container {
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 2rem 3rem;
+}
+
+.page-title {
+  font-weight: 600;
+  font-size: 2rem;
+  color: #0b1e3a;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-title i {
+  color: #2a7de1;
+  font-size: 2rem;
+}
+
+.subhead {
+  color: #4d627c;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  border-left: 3px solid #2a7de1;
+  padding-left: 1rem;
+}
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.room-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background: white;
+  border-radius: 28px;
+  padding: 1.8rem 1.5rem 1.8rem;
+  box-shadow: 0 12px 30px rgba(0, 20, 40, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.room-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(42, 125, 225, 0.10);
+  border-color: #c7ddfa;
+}
+
+.room-icon {
+  background: #eef6ff;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: #2a7de1;
+  margin-bottom: 1rem;
+}
+
+.room-name {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #0b1e3a;
+  letter-spacing: -0.02em;
+}
+
+.room-desc {
+  color: #5b6f89;
+  font-size: 0.95rem;
+  margin: 0.4rem 0 1.2rem;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.room-meta {
+  display: flex;
+  gap: 14px;
+  font-size: 0.9rem;
+  color: #365073;
+  border-top: 1px solid #ecf2f9;
+  padding-top: 1rem;
+  margin-top: 0.2rem;
+}
+
+.room-meta i {
+  color: #2a7de1;
+  width: 18px;
+}
+
+.book-btn {
+  background: white;
+  border: 1.5px solid #dae2ed;
+  border-radius: 40px;
+  padding: 10px 0;
+  font-weight: 600;
+  color: #1f2a44;
+  margin-top: 1.2rem;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.book-btn i {
+  color: #2a7de1;
+  transition: 0.2s;
+}
+
+.book-btn:hover {
+  background: #2a7de1;
+  border-color: #2a7de1;
+  color: white;
+  box-shadow: 0 6px 14px rgba(42, 125, 225, 0.25);
+}
+
+.book-btn:hover i {
+  color: white;
+}
+
+.status-badge {
+  align-self: flex-start;
+  background: #e2f0e8;
+  color: #1b6e4b;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 40px;
+  letter-spacing: 0.3px;
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-badge i {
+  font-size: 0.6rem;
+}
+
+.footer-note {
+  margin-top: 3.5rem;
+  text-align: center;
+  color: #6a7e99;
+  font-size: 0.9rem;
+  border-top: 1px solid #e2eaf2;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.footer-note span i {
+  margin-right: 6px;
+  color: #2a7de1;
+}
+
+/* адаптив */
+@media (max-width: 680px) {
+  .header {
+    padding: 0 1.2rem;
+  }
+  .brand {
+    font-size: 1.2rem;
+  }
+  .header-badge {
+    display: none;
+  }
+  .header-right .divider {
+    display: none;
+  }
+  .btn-outline span {
+    display: none;
+  }
+  .btn-outline i {
+    margin: 0;
+  }
+  .btn-outline {
+    padding: 8px 14px;
+  }
+}

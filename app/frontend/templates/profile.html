@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Профиль | TalRooms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href=" {{ url_for('static', path='styles/profile.css') }}">
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 12px;">
+        <div class="logo-icon"><i class="fas fa-phone-alt"></i></div>
+        <div class="brand">Tal<span>Rooms</span></div>
+      </a>
+    </div>
+    <div class="header-right">
+      <div class="header-badge">
+        <i class="fas fa-bell"></i> Уведомлений нет
+      </div>
+      <div class="divider"></div>
+      <div class="header-badge" style="background: transparent; border: none; padding: 0;">
+        <i class="fas fa-calendar-alt" style="color: #2a7de1;"></i>
+        <span style="font-weight: 500; color: #1f2a44;">{{ today_date }}</span>
+      </div>
+      <a href="/" style="text-decoration: none;">
+        <button class="btn-outline">
+          <i class="fas fa-arrow-left"></i>
+          <span>На главную</span>
+        </button>
+      </a>
+    </div>
+  </header>
+
+  <div class="profile-wrapper">
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="profile-title">
+        <h1>{{ first_name }} {{ last_name }}</h1>
+        <div class="sub">
+          <span><i class="fas fa-briefcase"></i> {{ role }}</span>
+          <span><i class="fas fa-circle" style="color: #2a9d8f; font-size: 0.6rem;"></i> {{ is_active }}</span>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <div id="editContainer" style="display: flex; gap: 10px; align-items: center;">
+          <button class="btn-edit"><i class="fas fa-pen"></i> Редактировать</button>
+          <button class="btn-danger" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> Выйти
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="profile-card">
+        <div class="card-title"><i class="fas fa-id-card"></i> Личные данные</div>
+        <div class="info-row">
+          <span class="label">Полное имя</span>
+          <span class="value">{{ first_name }} {{ last_name }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Эл. почта</span>
+          <span class="value"><i class="fas fa-envelope"></i>{{ email }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Должность</span>
+          <span class="value">{{ role }}</span>
+        </div>
+      </div>
+
+      <div class="profile-card">
+        <div class="card-title"><i class="fas fa-sliders-h"></i> Настройки</div>
+        <div class="info-row">
+          <span class="label">Язык интерфейса</span>
+          <span class="value">Русский</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Часовой пояс</span>
+          <span class="value">UTC</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Дата регистрации</span>
+          <span class="value">{{ date_register }} UTC</span>
+        </div>
+      </div>
+
+      <div class="profile-card full-width">
+        <div class="card-title"><i class="fas fa-calendar-check"></i> Мои бронирования</div>
+
+        <div id="bookingsList">
+          <div class="booking-skeleton" style="padding: 1rem; text-align: center; color: #7b90ab;">
+            <i class="fas fa-spinner fa-spin"></i> Загрузка бронирований...
+          </div>
+        </div>
+
+        <div style="margin-top: 1rem; display: flex; justify-content: flex-end;">
+          <div id="bookContainer" style="display: flex; gap: 10px; align-items: center;">
+            <a href="/" style="text-decoration: none;">
+              <button class="btn-edit"><i class="fas fa-calendar-plus"></i> Посмотреть все брони</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src=" {{ url_for('static', path='js/profile.js') }}"></script>
+</body>
+</html>

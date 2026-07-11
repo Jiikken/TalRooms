@@ -1,0 +1,62 @@
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  if (!email || !password) {
+    alert('⚠️ Пожалуйста, заполните все поля');
+    return;
+  }
+
+  try {
+    const responseCheckUser = await fetch('/auth/check-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+
+    const resultCheckUser = await responseCheckUser.json();
+
+    if (resultCheckUser.exists) {
+      const responsePasswordCheck = await fetch('/auth/check-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const resultPasswordCheck = await responsePasswordCheck.json();
+
+      if (resultPasswordCheck) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/auth/login-user';
+
+        const fields = { email };
+        for (const [key, value] of Object.entries(fields)) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value;
+          form.appendChild(input);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+      } else {
+        alert("Неверный пароль");
+      }
+    } else {
+      alert('❌ Пользователь не зарегистрирован');
+    }
+  } catch (error) {
+    console.error('Ошибка:', error);
+    alert('⚠️ Ошибка сервера. Попробуйте позже');
+  }
+});
+
+document.querySelectorAll('.social-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const provider = this.classList.contains('google') ? 'Google' : 'GitHub';
+    alert(`🔐 Вход через ${provider} (демо-режим)`);
+  });
+});

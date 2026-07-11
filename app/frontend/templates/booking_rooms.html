@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бронирование конференц-комнат | TalRooms </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', path='styles/booking_rooms.css') }}">
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 12px;">
+        <div class="logo-icon"><i class="fas fa-phone-alt"></i></div>
+        <div class="brand">Tal<span>Rooms</span></div>
+      </a>
+    </div>
+    <div class="header-right">
+      <div class="header-badge">
+        <i class="fas fa-bell"></i> Уведомлений нет
+      </div>
+      <div class="divider"></div>
+      <div class="header-badge" style="background: transparent; border: none; padding: 0;">
+        <i class="fas fa-calendar-alt" style="color: #2a7de1;"></i>
+        <span style="font-weight: 500; color: #1f2a44;">{{ today_date }}</span>
+      </div>
+      <div id="authContainer">
+        <a href="/auth/login" style="text-decoration: none;">
+          <button id="authButton" class="btn-primary">
+            <i class="fas fa-sign-in-alt"></i> Вход
+          </button>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="booking-wrapper">
+    <section class="rooms-section">
+      <h2><i class="fas fa-door-open"></i> Доступные комнаты</h2>
+      <p class="rooms-sub">Нажмите на комнату, чтобы выбрать её для бронирования</p>
+      <div id="roomList" class="room-list">
+        <div class="loading-spinner">
+          <i class="fas fa-spinner"></i>
+          <p style="margin-top: 8px;">Загрузка комнат...</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="booking-form">
+      <h3><i class="fas fa-pen-to-square"></i> Бронирование</h3>
+      <p class="form-sub">Заполните данные для бронирования конференц-комнаты</p>
+
+      <form id="bookingForm" onsubmit="handleBooking(event)">
+        <div class="form-group">
+          <label for="userId"><i class="fas fa-user"></i>Кто арендует (ID клиента)</label>
+          <div class="input-wrap">
+            <i class="fas fa-id-badge"></i>
+            <input type="text" id="userId" placeholder="Введите ID клиента" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="roomId"><i class="fas fa-door-open"></i> Комната (ID)</label>
+          <div class="input-wrap">
+            <i class="fas fa-hashtag"></i>
+            <input type="text" id="roomId" placeholder="ID комнаты" value="{{ room_id }}" required>
+          </div>
+          <div style="margin-top: 6px; font-size: 0.85rem; color: #5b6f89; display: flex; gap: 8px; align-items: center;">
+            <span style="background: #eef6ff; padding: 2px 12px; border-radius: 40px; font-weight: 500;">
+              <i class="fas fa-tag" style="color: #2a7de1;"></i> <span id="roomNameDisplay">Атлантис</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-clock"></i> Промежуток времени</label>
+          <div class="form-row">
+            <div class="input-wrap">
+              <i class="fas fa-calendar-day"></i>
+              <input type="date" id="bookingDate" required>
+            </div>
+            <div class="input-wrap">
+              <i class="fas fa-play"></i>
+              <input type="time" id="startTime" value="10:00" required>
+            </div>
+            <div class="input-wrap">
+              <i class="fas fa-stop"></i>
+              <input type="time" id="endTime" value="12:00" required>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-book">
+          <i class="fas fa-calendar-check"></i> Забронировать
+        </button>
+        <div class="form-hint">
+          <i class="fas fa-info-circle"></i> После бронирования комната будет заблокирована на выбранное время
+        </div>
+      </form>
+    </section>
+  </div>
+  <script src="{{ url_for('static', path='js/booking_rooms.js') }}"></script>
+</body>
+</html>

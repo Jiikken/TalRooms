@@ -1,0 +1,476 @@
+/* styles/register.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #f4f7fc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 80px;
+}
+
+/* ----- СТАТИЧНАЯ ШАПКА (поверх всего) ----- */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 20, 40, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  z-index: 999;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  background: #2a7de1;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  box-shadow: 0 6px 12px rgba(42, 125, 225, 0.25);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: #0b1e3a;
+}
+
+.brand span {
+  color: #2a7de1;
+  font-weight: 300;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid #d0dbe8;
+  padding: 8px 18px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1f2a44;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.btn-outline i {
+  color: #2a7de1;
+  font-size: 1rem;
+}
+
+.btn-outline:hover {
+  background: #2a7de1;
+  border-color: #2a7de1;
+  color: white;
+  box-shadow: 0 6px 14px rgba(42, 125, 225, 0.25);
+}
+
+.btn-outline:hover i {
+  color: white;
+}
+
+/* ----- КОНТЕЙНЕР РЕГИСТРАЦИИ ----- */
+.register-container {
+  max-width: 480px;
+  width: 100%;
+  padding: 0 1.5rem;
+  margin-top: 2rem;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.register-card {
+  background: white;
+  border-radius: 32px;
+  padding: 3rem 2.5rem;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  transition: all 0.3s ease;
+}
+
+.register-card:hover {
+  box-shadow: 0 24px 70px rgba(42, 125, 225, 0.10);
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.register-header .register-icon {
+  background: #eef6ff;
+  width: 72px;
+  height: 72px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.2rem;
+  font-size: 32px;
+  color: #2a7de1;
+}
+
+.register-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0b1e3a;
+  margin-bottom: 0.4rem;
+}
+
+.register-header p {
+  color: #5b6f89;
+  font-size: 0.95rem;
+}
+
+/* ----- ФОРМА ----- */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1f2a44;
+  margin-bottom: 0.5rem;
+}
+
+.form-group label i {
+  color: #2a7de1;
+  margin-right: 8px;
+  width: 16px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #dae2ed;
+  border-radius: 16px;
+  font-size: 1rem;
+  font-family: "Inter", sans-serif;
+  transition: 0.2s;
+  background: #fafcfe;
+  color: #0b1e3a;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #2a7de1;
+  box-shadow: 0 0 0 4px rgba(42, 125, 225, 0.10);
+  background: white;
+}
+
+.form-group input::placeholder {
+  color: #a0b3cc;
+}
+
+.form-group input.error {
+  border-color: #e76f51;
+  box-shadow: 0 0 0 4px rgba(231, 111, 81, 0.10);
+}
+
+.error-message {
+  color: #e76f51;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  display: none;
+}
+
+.error-message.show {
+  display: block;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.password-strength {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.strength-bar {
+  flex: 1;
+  height: 4px;
+  background: #e2eaf2;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  gap: 4px;
+}
+
+.strength-bar .segment {
+  flex: 1;
+  height: 100%;
+  background: #e2eaf2;
+  transition: 0.3s;
+  border-radius: 2px;
+}
+
+.strength-bar .segment.active.weak {
+  background: #e76f51;
+}
+
+.strength-bar .segment.active.medium {
+  background: #f4a261;
+}
+
+.strength-bar .segment.active.strong {
+  background: #2a9d8f;
+}
+
+.strength-text {
+  font-size: 0.75rem;
+  color: #6a7e99;
+  min-width: 50px;
+  text-align: right;
+}
+
+.form-options {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 1.5rem 0 2rem;
+}
+
+.form-options input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #2a7de1;
+  cursor: pointer;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.form-options label {
+  font-size: 0.9rem;
+  color: #365073;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.form-options label a {
+  color: #2a7de1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form-options label a:hover {
+  text-decoration: underline;
+}
+
+.btn-register {
+  width: 100%;
+  background: #2a7de1;
+  border: none;
+  padding: 14px;
+  border-radius: 40px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 6px 20px rgba(42, 125, 225, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: "Inter", sans-serif;
+}
+
+.btn-register i {
+  color: white;
+  font-size: 1.1rem;
+}
+
+.btn-register:hover {
+  background: #1a5fc7;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(42, 125, 225, 0.35);
+}
+
+.btn-register:active {
+  transform: translateY(0);
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 1.8rem;
+  font-size: 0.95rem;
+  color: #5b6f89;
+}
+
+.login-link a {
+  color: #2a7de1;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.login-link a:hover {
+  color: #1a5fc7;
+  text-decoration: underline;
+}
+
+.divider-text {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 1.8rem 0;
+}
+
+.divider-text::before,
+.divider-text::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e2eaf2;
+}
+
+.divider-text span {
+  color: #8a9bb5;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.social-register {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.social-btn {
+  flex: 1;
+  padding: 10px;
+  border: 1.5px solid #dae2ed;
+  border-radius: 16px;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1f2a44;
+  font-family: "Inter", sans-serif;
+}
+
+.social-btn i {
+  font-size: 1.2rem;
+}
+
+.social-btn.google i {
+  color: #ea4335;
+}
+
+.social-btn.github i {
+  color: #24292e;
+}
+
+.social-btn:hover {
+  background: #f4f7fc;
+  border-color: #b0c4db;
+  transform: translateY(-2px);
+}
+
+/* ----- ПОДВАЛ ----- */
+.footer-note {
+  margin-top: 3rem;
+  padding: 1.5rem 0 2rem;
+  text-align: center;
+  color: #6a7e99;
+  font-size: 0.9rem;
+  border-top: 1px solid #e2eaf2;
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.footer-note span i {
+  margin-right: 6px;
+  color: #2a7de1;
+}
+
+/* ----- АДАПТИВ ----- */
+@media (max-width: 680px) {
+  .header {
+    padding: 0 1.2rem;
+  }
+  .brand {
+    font-size: 1.2rem;
+  }
+  .header-right .btn-outline span {
+    display: none;
+  }
+  .header-right .btn-outline {
+    padding: 8px 14px;
+  }
+
+  .register-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .register-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form-options {
+    align-items: flex-start;
+  }
+
+  .social-register {
+    flex-direction: column;
+  }
+}
