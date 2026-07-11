@@ -20,6 +20,9 @@ async function createBookButton() {
   const newButton = document.createElement('button');
   newButton.className = 'btn-edit';
   newButton.innerHTML = '<i class="fas fa-plus"></i>Создать новую бронь';
+  newButton.addEventListener('click', function() {
+    window.location.href = '/booking-rooms';
+  });
 
   container.insertBefore(newButton, container.firstChild);
 }
