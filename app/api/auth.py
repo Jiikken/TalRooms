@@ -2,17 +2,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import unquote
 
-from fastapi import APIRouter, Request, Form, Body, Response
+from fastapi import APIRouter, Request, Form, Response
 from fastapi.params import Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database.connect import get_db
-from app.core.database.crud.user import create_user, get_hashed_password, update_user_activity
-from app.core.database.security import exists_user
-from app.core.security.JWT import create_access_token, get_info_from_access_token
-from app.core.security.password import check_password
+from app.core.database.crud.user import create_user, update_user_activity
+from app.core.security.JWT import create_access_token
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -27,12 +25,6 @@ async def login(request: Request):
 async def register(request: Request):
     """Страница регистрации"""
     return templates.TemplateResponse(request, "register.html")
-
-@router.post("/check-user")
-async def check_exists_user(session: AsyncSession = Depends(get_db), email: str = Body(..., embed=True)):
-    """Проверка существования пользователя в базе данных"""
-    exists = await exists_user(session, email)
-    return {"exists": exists}
 
 @router.post("/register-user")
 async def register_user(request: Request, session: AsyncSession = Depends(get_db),
@@ -85,27 +77,8 @@ async def login_user(request: Request, response: Response, email: str = Form(...
                                       headers=response.headers
                                       )
 
-@router.get("/get/email")
-async def get_email_user(request: Request):
-    token = request.cookies.get("access_token")
-    return get_info_from_access_token(token, "email")
-
 @router.post("/logout")
 async def logout_user(response: Response):
     """Выход из аккаунта"""
     response.delete_cookie("access_token")
     return {"message": "Logged out"}
-
-@router.get("/check-auth")
-async def check_auth_user(request: Request):
-    """Проверка пользователя на вход"""
-    token = request.cookies.get("access_token")
-    if token:
-        return {"authenticated": True}
-    return {"authenticated": False}
-
-@router.post("/check-password")
-async def check_password_user(session: AsyncSession = Depends(get_db), email: str = Body(...), password: bytes = Body(...)):
-    """Проверка правильности пароля"""
-    hashed_password = await get_hashed_password(session, email)
-    return check_password(password, hashed_password.encode('utf-8'))

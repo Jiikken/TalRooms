@@ -1,31 +1,59 @@
 from datetime import datetime
 from pathlib import Path
 
-from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi import APIRouter, Request, Depends, HTTPException, Body
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database.connect import get_db
-from app.core.database.crud.user import get_user_info, get_user_by_id_bd
+from app.core.database.crud.user import get_user_info, get_user_by_id_bd, get_hashed_password
+from app.core.database.security import exists_user
 from app.core.security.JWT import get_info_from_access_token
+from app.core.security.password import check_password
 
 router = APIRouter(prefix="/user", tags=["User"])
 
 templates = Jinja2Templates(directory=Path(__file__).parent.parent / "frontend" / "templates")
 
-@router.get("/get-role")
+@router.get("/get/role")
 async def get_user_role(request: Request):
     """Получение роли пользователя"""
     token = request.cookies.get("access_token")
     role = get_info_from_access_token(token, "role")
     return {"role": role}
 
-@router.get("/get-id")
+@router.get("/get/id")
 async def get_user_id(request: Request):
     """Получение ID пользователя"""
     token = request.cookies.get("access_token")
     _id = get_info_from_access_token(token, "user_id")
     return {"user_id": _id}
+
+@router.get("/get/email")
+async def get_email_user(request: Request):
+    """Получение email из access_token"""
+    token = request.cookies.get("access_token")
+    return get_info_from_access_token(token, "email")
+
+@router.post("/check-user")
+async def check_exists_user(session: AsyncSession = Depends(get_db), email: str = Body(..., embed=True)):
+    """Проверка существования пользователя в базе данных"""
+    exists = await exists_user(session, email)
+    return {"exists": exists}
+
+@router.get("/check-auth")
+async def check_auth_user(request: Request):
+    """Проверка пользователя на вход"""
+    token = request.cookies.get("access_token")
+    if token:
+        return {"authenticated": True}
+    return {"authenticated": False}
+
+@router.post("/check-password")
+async def check_password_user(session: AsyncSession = Depends(get_db), email: str = Body(...), password: bytes = Body(...)):
+    """Проверка правильности пароля"""
+    hashed_password = await get_hashed_password(session, email)
+    return check_password(password, hashed_password.encode('utf-8'))
 
 @router.get("/get-user-by-id/{user_id}")
 async def get_user_by_id(user_id: int, request: Request, session: AsyncSession = Depends(get_db)):

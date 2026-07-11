@@ -34,7 +34,7 @@ async function createAppendEmployeeButton() {
 }
 
 async function updateButtons() {
-  const roleResponse = await fetch('/user/get-role');
+  const roleResponse = await fetch('/user/get/role');
   const roleData = await roleResponse.json();
 
   if (roleData.role >= 1){
@@ -102,7 +102,7 @@ function renderBookings(bookings) {
 async function fetchBookings() {
   try {
 
-    const userIdResponse = await fetch('/user/get-id');
+    const userIdResponse = await fetch('/user/get/id');
     const userIdData = await userIdResponse.json();
 
     const response = await fetch('/booking-rooms/get-my-booked-rooms/' + userIdData.user_id, {

@@ -9,7 +9,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
   }
 
   try {
-    const responseCheckUser = await fetch('/auth/check-user', {
+    const responseCheckUser = await fetch('/user/check-user', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
@@ -18,7 +18,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const resultCheckUser = await responseCheckUser.json();
 
     if (resultCheckUser.exists) {
-      const responsePasswordCheck = await fetch('/auth/check-password', {
+      const responsePasswordCheck = await fetch('/user/check-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

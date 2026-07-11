@@ -138,7 +138,7 @@ form.addEventListener('submit', async function(e) {
   }
 
   try {
-    const _responseCheckUser = await fetch('/auth/check-user', {
+    const _responseCheckUser = await fetch('/user/check-user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

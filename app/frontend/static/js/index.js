@@ -61,7 +61,7 @@
 
 async function removeToBookingPage(roomId) {
   try {
-        const userRoleResponse = await fetch('/user/get-role');
+        const userRoleResponse = await fetch('/user/get/role');
         const userRoleData = await userRoleResponse.json();
         if (userRoleData.role < 1){
             alert('Для аренды комнаты обратитесь к сотрудникам компании');
@@ -106,7 +106,7 @@ async function createAuthButton(type) {
   } else if (type === 'profile') {
     const link = document.createElement('a');
 
-    const userId = await fetch('/user/get-id');
+    const userId = await fetch('/user/get/id');
     const dataUser = await userId.json();
 
     link.href = '/user/profile/' + dataUser.user_id;
@@ -126,7 +126,7 @@ const authButton = document.getElementById('authButton');
 const authButtonText = document.getElementById('authButtonText');
 
 async function updateAuthButton() {
-  const response = await fetch('/auth/check-auth');
+  const response = await fetch('/user/check-auth');
   const data = await response.json();
 
   if (data.authenticated) {
