@@ -61,6 +61,13 @@
 
 async function removeToBookingPage(roomId) {
   try {
+        const userIsAuthResponse = await fetch('/user/check-auth');
+        const userIsAuthData = await userIsAuthResponse.json();
+        if (!userIsAuthData.authenticated){
+            alert('Для начала нужно авторизоваться');
+            return;
+        }
+
         const userRoleResponse = await fetch('/user/get/role');
         const userRoleData = await userRoleResponse.json();
         if (userRoleData.role < 1){
