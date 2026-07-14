@@ -55,7 +55,7 @@ async def check_password_user(session: AsyncSession = Depends(get_db), email: st
     hashed_password = await get_hashed_password(session, email)
     return check_password(password, hashed_password.encode('utf-8'))
 
-@router.get("/get-user-by-id/{user_id}")
+@router.get("/get/user-by-id/{user_id}")
 async def get_user_by_id(user_id: int, request: Request, session: AsyncSession = Depends(get_db)):
     """Получение пользователя по ID"""
     token = request.cookies.get("access_token")

@@ -91,7 +91,7 @@ function selectRoom(element, roomId, roomName) {
 async function handleBooking(event) {
   event.preventDefault();
 
-  const idEmployeeResponse = await fetch('/user/get-id');
+  const idEmployeeResponse = await fetch('/user/get/id');
   const idEmployeeData = await idEmployeeResponse.json();
 
   const employeeId = idEmployeeData.user_id;
@@ -113,7 +113,7 @@ async function handleBooking(event) {
     return;
   }
 
-  const userExistsResponse = await fetch('/user/get-user-by-id/' + clientId);
+  const userExistsResponse = await fetch('/user/get/user-by-id/' + clientId);
   const userExistsData = await userExistsResponse.json();
 
   if (!userExistsData){
@@ -127,6 +127,12 @@ async function handleBooking(event) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(bookingData)
   });
+  const dataResponse = await response.json();
+
+  if (dataResponse.booking == 'null'){
+    alert('Комната уже забронирована на это время');
+    return;
+  }
 
   const message = `✅ Бронирование успешно!\n\n` +
     `👤 Сотрудник ID: ${employeeId}\n` +

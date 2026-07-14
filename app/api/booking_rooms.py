@@ -53,7 +53,10 @@ async def book_room(request: Request, session: AsyncSession = Depends(get_db)):
     start_time = datetime.strptime(data.get("start"), "%H:%M")
     end_time = datetime.strptime(data.get("end"), "%H:%M")
 
-    booking_room = await create_booking(session, room_id, employee_id, client_id, date, start_time, end_time)
+    try:
+        booking_room = await create_booking(session, room_id, employee_id, client_id, date, start_time, end_time)
+    except ValueError:
+        return {"booking": "null"}
 
     return {"booking": booking_room}
 
