@@ -34,6 +34,16 @@ async def is_room_available_exists(
     exists_flag = result.scalar()
     return not exists_flag
 
+async def update_status_room(session: AsyncSession, room_id, new_status):
+    """Изменение статуса комнаты"""
+    stmt = (
+        update(Rooms)
+        .where(Rooms.id == room_id)
+        .values(status=new_status)
+    )
+    await session.execute(stmt)
+    await session.commit()
+
 async def create_booking(session: AsyncSession,
                          room_id: int,
                          employee_id: int,
