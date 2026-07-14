@@ -66,32 +66,16 @@ function renderBookings(bookings) {
     let statusIcon = 'fa-clock';
     let statusText = 'Предстоит';
 
-    switch(booking.status) {
-      case 'completed':
-        statusClass = 'past';
-        statusIcon = 'fa-check';
-        statusText = 'Завершено';
-        break;
-      case 'cancelled':
-        statusClass = 'cancelled';
-        statusIcon = 'fa-times';
-        statusText = 'Отменено';
-        break;
-      case 'upcoming':
-      default:
-        statusClass = 'upcoming';
-        statusIcon = 'fa-clock';
-        statusText = 'Предстоит';
-        break;
-    }
-
+    const date = booking.date.split('T')[0]
+    const startTime = booking.start_time.split('T')[1].slice(0, 5);
+    const endTime = booking.end_time.split('T')[1].slice(0, 5);
     return `
       <div class="booking-item">
         <div class="booking-info">
-          <span class="room">${booking.room}</span>
+          <span class="room">${booking.room.name_room}</span>
           <span class="meta">
             <i class="far fa-calendar-alt"></i>
-            ${booking.date} · ${booking.timeStart} – ${booking.timeEnd}
+            ${date} | ${startTime} – ${endTime}
           </span>
         </div>
         <span class="booking-status ${statusClass}">
@@ -114,7 +98,6 @@ async function fetchBookings() {
         'Content-Type': 'application/json',
       }
     });
-
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

@@ -1,19 +1,23 @@
 from datetime import datetime
 
-from sqlalchemy import select, or_, exists
+from sqlalchemy import select, or_, exists, update
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
-from app.models.user import RoomsBooking
+from app.models.user import RoomsBooking, Rooms
+
 
 async def get_user_booking(session: AsyncSession, user_id: int):
     """Получение броней пользователя"""
     stmt = (select(RoomsBooking)
             .where(or_(RoomsBooking.booked_by_id == user_id, RoomsBooking.requested_by_id == user_id))
+            .options(selectinload(RoomsBooking.room))
             .order_by(RoomsBooking.start_time.desc())
     )
 
     result = await session.execute(stmt)
-    return result.scalars().all()
+    booking = result.scalars().all()
+    return booking
 
 
 async def is_room_available_exists(

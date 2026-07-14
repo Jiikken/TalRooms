@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import IntEnum
 
 from sqlalchemy import Integer, String, DateTime, Boolean, ForeignKey, func, SmallInteger
-from sqlalchemy.orm import Mapped, DeclarativeBase
+from sqlalchemy.orm import Mapped, DeclarativeBase, relationship
 from sqlalchemy.testing.schema import mapped_column
 
 
@@ -55,3 +55,5 @@ class RoomsBooking(Base):
     end_time: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime,default=func.now(),nullable=False)
+
+    room: Mapped["Rooms"] = relationship("Rooms", lazy="selectin")
