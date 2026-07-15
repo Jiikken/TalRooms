@@ -85,7 +85,7 @@ async def booked_room(request: Request, user_id: int, room_id: int, session: Asy
         raise HTTPException(status_code=404, detail="Страница не найдена")
 
     room = await get_room_by_id(session, room_id)
-    return {"room": room}
+    return templates.TemplateResponse(request, "booked_room.html")
 
 @router.get("/profile/{user_id}")
 async def profile(request: Request, user_id: int, session: AsyncSession = Depends(get_db)):

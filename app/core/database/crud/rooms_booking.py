@@ -44,6 +44,17 @@ async def get_room_by_id(session: AsyncSession, room_id):
     room = result.scalar_one()
     return room
 
+async def get_booked_room_by_id(session: AsyncSession, room_id):
+    """Получение ID комнаты по имени"""
+    stmt = (
+        select(RoomsBooking)
+        .where(Rooms.id == room_id)
+        .options(selectinload(RoomsBooking.room))
+    )
+    result = await session.execute(stmt)
+    room = result.scalars().all()
+    return room
+
 async def update_status_room(session: AsyncSession, room_id, new_status):
     """Изменение статуса комнаты"""
     stmt = (
