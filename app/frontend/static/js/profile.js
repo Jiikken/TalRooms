@@ -67,15 +67,13 @@ function renderBookings(bookings) {
     let statusText = 'Предстоит';
 
     const date = booking.date.split('T')[0]
-    const startTime = booking.start_time.split('T')[1].slice(0, 5);
-    const endTime = booking.end_time.split('T')[1].slice(0, 5);
     return `
       <div class="booking-item">
         <div class="booking-info">
           <span class="room">${booking.room.name_room}</span>
           <span class="meta">
             <i class="far fa-calendar-alt"></i>
-            ${date} | ${startTime} – ${endTime}
+            ${date} | ${booking.room.start_time} – ${booking.room.end_time} UTC
           </span>
         </div>
         <span class="booking-status ${statusClass}">

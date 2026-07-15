@@ -23,7 +23,7 @@
             <div class="room-card" data-id="${room.id}">
               <div class="room-icon"><i class="fas ${room.icon || 'fa-door-open'}"></i></div>
               <div class="room-name">${room.name_room}</div>
-              <div class="room-desc">до ${room.capacity} чел}</div>
+              <div class="room-desc">до ${room.capacity} чел</div>
               <div class="room-meta">
                 <span><i class="fas fa-clock"></i> ${room.start_time} — ${room.end_time} UTC</span>
               </div>
