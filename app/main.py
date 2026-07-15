@@ -34,6 +34,12 @@ async def ping():
     """Проверка работоспособности"""
     return {"status": "ok", "message": "pong"}
 
+@app.get("/get/today")
+async def get_date():
+    """Получение сегодняшней даты"""
+    today_date = datetime.now().strftime("%Y-%m-%d")
+    return {"today_date": today_date}
+
 app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(booking_rooms.router)
