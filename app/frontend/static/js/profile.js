@@ -48,7 +48,7 @@ async function updateButtons() {
   }
 }
 
-function renderBookings(bookings) {
+function renderBookings(bookings, userId) {
   const container = document.getElementById('bookingsList');
 
   if (!bookings || bookings.length === 0) {
@@ -104,7 +104,7 @@ async function fetchBookings() {
 
     const data = await response.json();
 
-    renderBookings(data.booking_rooms);
+    renderBookings(data.booking_rooms, userIdData.user_id);
 
   } catch (error) {
     console.error('Ошибка загрузки бронирований:', error);
