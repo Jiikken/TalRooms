@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database.connect import get_db
 from app.core.database.crud.rooms import get_all_rooms
-from app.core.database.crud.rooms_booking import create_booking, get_user_booking, get_room_id_by_name
+from app.core.database.crud.rooms_booking import create_booking, get_user_booking
 from app.core.security.JWT import get_info_from_access_token
 
 router = APIRouter(prefix="/booking-rooms")
@@ -58,12 +58,6 @@ async def book_room(request: Request, session: AsyncSession = Depends(get_db)):
         return {"booking": "null"}
 
     return {"booking": booking_room}
-
-@router.get("/get/room-id/{name_room}")
-async def get_room_id(name_room: str, session: AsyncSession = Depends(get_db)):
-    """Получение ID комнаты по названию"""
-    room_id = await get_room_id_by_name(session, name_room)
-    return room_id
 
 @router.get("/get-my-booked-rooms/{user_id}")
 async def all_booking_rooms(request: Request, user_id: int, session: AsyncSession = Depends(get_db)):
