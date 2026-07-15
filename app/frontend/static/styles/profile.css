@@ -76,6 +76,42 @@ body {
 }
 
 /* ----- КНОПКИ ----- */
+.btn-booking-small {
+  background: #ffffff;
+  border: 1.5px solid #d0dbe8;
+  padding: 5px 16px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #1f2a44;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Inter", sans-serif;
+  line-height: 1.5;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.btn-booking-small i {
+  color: #2a7de1;
+  font-size: 0.85rem;
+}
+
+.btn-booking-small:hover {
+  background: #f2f6fc;
+  border-color: #b0c8e2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 20, 40, 0.08);
+}
+
+.btn-booking-small:active {
+  transform: translateY(0px);
+  box-shadow: none;
+}
+
 .btn-outline {
   background: transparent;
   border: 1.5px solid #d0dbe8;
