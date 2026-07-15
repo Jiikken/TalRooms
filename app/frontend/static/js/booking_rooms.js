@@ -99,17 +99,10 @@ async function handleBooking(event) {
   const roomId = document.getElementById('roomId').value.trim();
   const roomName = document.getElementById('roomNameDisplay').textContent;
   const date = document.getElementById('bookingDate').value;
-  const start = document.getElementById('startTime').value;
-  const end = document.getElementById('endTime').value;
 
   // Простая валидация
-  if (!clientId || !roomId || !date || !start || !end) {
+  if (!clientId || !roomId || !date) {
     alert('⚠️ Пожалуйста, заполните все поля.');
-    return;
-  }
-
-  if (start >= end) {
-    alert('⏳ Время начала должно быть раньше времени окончания.');
     return;
   }
 
@@ -121,7 +114,7 @@ async function handleBooking(event) {
     return;
   }
 
-  const bookingData = { employeeId, clientId, roomId, date, start, end };
+  const bookingData = { employeeId, clientId, roomId, date };
   const response = await fetch('/booking-rooms/book-room', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -139,7 +132,6 @@ async function handleBooking(event) {
     `👤 Арендатор ID: ${clientId}\n` +
     `🚪 Комната: ${roomName} (ID: ${roomId})\n` +
     `📅 Дата: ${date}\n` +
-    `⏰ Время: ${start} – ${end}\n\n` +
     `Статус: подтверждено`;
 
   alert(message);

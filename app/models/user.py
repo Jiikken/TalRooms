@@ -53,8 +53,6 @@ class RoomsBooking(Base):
     requested_by_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     date: Mapped[datetime] = mapped_column(DateTime, nullable=False)
-    start_time: Mapped[datetime] = mapped_column(DateTime, nullable=False)
-    end_time: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime,default=func.now(),nullable=False)
 

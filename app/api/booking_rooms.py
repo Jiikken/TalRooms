@@ -51,11 +51,9 @@ async def book_room(request: Request, session: AsyncSession = Depends(get_db)):
     client_id = int(data.get("clientId"))
     room_id = int(data.get("roomId"))
     date = datetime.strptime(data.get("date"), "%Y-%m-%d")
-    start_time = datetime.strptime(data.get("start"), "%H:%M")
-    end_time = datetime.strptime(data.get("end"), "%H:%M")
 
     try:
-        booking_room = await create_booking(session, room_id, employee_id, client_id, date, start_time, end_time)
+        booking_room = await create_booking(session, room_id, employee_id, client_id, date)
     except ValueError:
         return {"booking": "null"}
 
