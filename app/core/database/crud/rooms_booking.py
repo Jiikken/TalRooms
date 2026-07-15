@@ -47,9 +47,8 @@ async def get_room_by_id(session: AsyncSession, room_id):
 async def get_booked_room_by_id(session: AsyncSession, room_id):
     """Получение ID комнаты по имени"""
     stmt = (
-        select(RoomsBooking)
+        select(Rooms)
         .where(Rooms.id == room_id)
-        .options(selectinload(RoomsBooking.room))
     )
     result = await session.execute(stmt)
     room = result.scalars().all()

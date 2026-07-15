@@ -62,7 +62,7 @@ async def book_room(request: Request, session: AsyncSession = Depends(get_db)):
 @router.get("/get/booked-room/{room_id}")
 async def get_info_booked_room_by_id(room_id: int, session: AsyncSession = Depends(get_db)):
     """Получение информации о бронировании комнаты по её ID"""
-    room = get_booked_room_by_id(session, room_id)
+    room = await get_booked_room_by_id(session, room_id)
     return {"room": room}
 
 @router.get("/get-my-booked-rooms/{user_id}")

@@ -1,26 +1,17 @@
 function renderBookingDetail(booking) {
   const container = document.getElementById('bookingContent');
-
-  const statusMap = {
-    'upcoming': { class: 'upcoming', icon: 'fa-clock', text: 'Предстоит' },
-    'completed': { class: 'past', icon: 'fa-check', text: 'Завершено' },
-    'cancelled': { class: 'cancelled', icon: 'fa-times', text: 'Отменено' }
-  };
-  const status = statusMap[booking.status] || statusMap['upcoming'];
+  console.log(booking)
 
   container.innerHTML = `
     <div class="detail-header">
       <div class="detail-title">
-        <div class="room-icon"><i class="${booking.icon || 'fas fa-door-open'}"></i></div>
+        <div class="room-icon"><i class="${'fas fa-door-open'}"></i></div>
         <div>
-          <h1>${booking.room}</h1>
+          <h1>${booking.name_room}</h1>
           <div class="room-location">
             <i class="fas fa-map-pin"></i> ${booking.location || 'Этаж не указан'}
           </div>
         </div>
-      </div>
-      <div class="detail-status ${status.class}">
-        <i class="fas ${status.icon}"></i> ${status.text}
       </div>
     </div>
 
@@ -31,7 +22,7 @@ function renderBookingDetail(booking) {
       </div>
       <div class="detail-item">
         <span class="label"><i class="far fa-clock"></i> Время</span>
-        <span class="value">${booking.timeStart} – ${booking.timeEnd}</span>
+        <span class="value">${booking.start_time} – ${booking.end_time}</span>
       </div>
       <div class="detail-item">
         <span class="label"><i class="fas fa-users"></i> Вместимость</span>
@@ -97,8 +88,7 @@ async function fetchBookingDetail(bookingId) {
     }
 
     const data = await response.json();
-    console.log(data);
-    renderBookingDetail(data);
+    renderBookingDetail(data.room[0]);
 
   } catch (error) {
     console.error('Ошибка загрузки деталей бронирования:', error);
@@ -106,8 +96,19 @@ async function fetchBookingDetail(bookingId) {
 }
 
 function getBookingIdFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('id') || '1'; // По умолчанию 123 для демо
+  // Получаем текущий URL
+  const url = window.location.pathname;
+
+  // Разбиваем URL на части
+  const parts = url.split('/');
+
+  // Ищем индекс "booked-room" и берём следующий элемент
+  const bookedRoomIndex = parts.indexOf('booked-room');
+  if (bookedRoomIndex !== -1 && bookedRoomIndex + 1 < parts.length) {
+    return parts[bookedRoomIndex + 1];
+  }
+
+  return null;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -166,7 +167,3 @@ async function updateAuthButton() {
 updateAuthButton();
 
 window.updateAuthButton = updateAuthButton;
-window.loadRooms = loadRooms;
-window.renderRooms = renderRooms;
-window.selectRoom = selectRoom;
-window.handleBooking = handleBooking;
