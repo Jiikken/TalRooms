@@ -6,6 +6,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database.connect import get_db
+from app.core.database.crud.rooms_booking import get_room_by_id
 from app.core.database.crud.user import get_user_info, get_user_by_id_bd, get_hashed_password
 from app.core.database.security import exists_user
 from app.core.security.JWT import get_info_from_access_token
@@ -64,6 +65,27 @@ async def get_user_by_id(user_id: int, request: Request, session: AsyncSession =
         raise HTTPException(status_code=404, detail="Not Found")
 
     return await get_user_by_id_bd(session, user_id)
+
+@router.get("/profile/{user_id}/booked-room/{room_id}")
+async def booked_room(request: Request, user_id: int, room_id: int, session: AsyncSession = Depends(get_db)):
+    """Страница деталей бронированной комнаты"""
+    token = request.cookies.get("access_token")
+
+    if not token:
+        raise HTTPException(status_code=401, detail="Пользователь не авторизован")
+
+    email = get_info_from_access_token(token, "email")
+
+    info_user = await get_user_by_id_bd(session, user_id)
+    if not info_user:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
+
+    current_user = await get_user_info(session, email)
+    if current_user["id"] != user_id:
+        raise HTTPException(status_code=404, detail="Страница не найдена")
+
+    room = await get_room_by_id(session, room_id)
+    return {"room": room}
 
 @router.get("/profile/{user_id}")
 async def profile(request: Request, user_id: int, session: AsyncSession = Depends(get_db)):
