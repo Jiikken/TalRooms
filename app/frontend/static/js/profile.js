@@ -62,10 +62,6 @@ function renderBookings(bookings) {
   }
 
   container.innerHTML = bookings.map(booking => {
-    let statusClass = 'upcoming';
-    let statusIcon = 'fa-clock';
-    let statusText = 'Предстоит';
-
     const date = booking.date.split('T')[0]
     return `
       <div class="booking-item">
@@ -76,9 +72,15 @@ function renderBookings(bookings) {
             ${date} | ${booking.room.start_time} – ${booking.room.end_time} UTC
           </span>
         </div>
-        <span class="booking-status ${statusClass}">
-          <i class="fas ${statusIcon}"></i> ${statusText}
-        </span>
+        <div style="margin-top: 0.5rem; display: flex; justify-content: flex-end;">
+          <div id="bookContainer" style="display: flex; gap: 6px; align-items: center;">
+            <a href="/user/profile/${userId}/booked-room/${booking.room.id}" style="text-decoration: none;">
+              <button class="btn-booking-small">
+                <i class="fas fa-calendar-plus"></i> Детали
+              </button>
+            </a>
+          </div>
+        </div>
       </div>
     `;
   }).join('');
@@ -118,7 +120,7 @@ async function fetchBookings() {
       font-size: 0.85rem;
       border: 1px solid #ffcdd2;
     `;
-    errorNotice.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Не удалось загрузить данные с сервера. Показаны примеры.`;
+    errorNotice.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Не удалось загрузить данные с сервера`;
     container.prepend(errorNotice);
   }
 }
