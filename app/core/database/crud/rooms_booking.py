@@ -20,7 +20,6 @@ async def get_user_booking(session: AsyncSession, user_id: int):
     booking = result.scalars().all()
     return booking
 
-
 async def is_room_available_exists(
         session: AsyncSession,
         room_id: int,
@@ -34,6 +33,16 @@ async def is_room_available_exists(
     result = await session.execute(stmt)
     exists_flag = result.scalar()
     return not exists_flag
+
+async def get_room_id_by_name(session: AsyncSession, name_room):
+    """Получение ID комнаты по имени"""
+    stmt = (
+        select(Rooms.id)
+        .where(Rooms.name_room.ilike(name_room))
+    )
+    result = await session.execute(stmt)
+    room_id = result.scalar_one_or_none()
+    return room_id
 
 async def update_status_room(session: AsyncSession, room_id, new_status):
     """Изменение статуса комнаты"""
