@@ -40,6 +40,8 @@ class Rooms(Base):
     name_room: Mapped[str] = mapped_column(String(255), nullable=False)
     status: Mapped[int] = mapped_column(SmallInteger, default=Status.AVAILABLE, server_default=str(Status.AVAILABLE.value))
     capacity: Mapped[int] = mapped_column(Integer, nullable=False)
+    start_time: Mapped[str] = mapped_column(String(255), nullable=False)
+    end_time: Mapped[str] = mapped_column(String(255), nullable=False)
 
 class RoomsBooking(Base):
     __tablename__ = "rooms_booking"

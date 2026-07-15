@@ -17,15 +17,15 @@
           const statusIcon = room.status === 1 ? 'fa-circle' : 'fa-circle';
           const statusColor = room.status === 1 ? '#2a9d8f' : '#e76f51';
           const statusText = room.status === 1 ? 'свободна' : 'занята';
+          console.log(room.start_time);
 
           html += `
             <div class="room-card" data-id="${room.id}">
               <div class="room-icon"><i class="fas ${room.icon || 'fa-door-open'}"></i></div>
               <div class="room-name">${room.name_room}</div>
-              <div class="room-desc">до ${room.capacity} чел · ${room.desc || ''}</div>
+              <div class="room-desc">до ${room.capacity} чел}</div>
               <div class="room-meta">
-                <span><i class="fas fa-clock"></i> ${room.time || '—'}</span>
-                <span><i class="fas fa-map-pin"></i> ${room.floor || '?'} этаж</span>
+                <span><i class="fas fa-clock"></i> ${room.start_time} — ${room.end_time} UTC</span>
               </div>
               <button class="book-btn" onclick="removeToBookingPage(${room.id})">
                 <i class="fas fa-calendar-plus"></i> Забронировать
