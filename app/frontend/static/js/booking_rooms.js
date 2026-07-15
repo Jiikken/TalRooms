@@ -99,8 +99,14 @@ async function handleBooking(event) {
   const roomId = document.getElementById('roomId').value.trim();
   const roomName = document.getElementById('roomNameDisplay').textContent;
   const date = document.getElementById('bookingDate').value;
+  const todayDateResponse = await fetch('/get/today');
+  const todayDateData = await todayDateResponse.json();
 
-  // Простая валидация
+  if (date < todayDateData.today_date){
+    alert('Дата должна быть не раньше сегодняшней');
+    return;
+  }
+
   if (!clientId || !roomId || !date) {
     alert('⚠️ Пожалуйста, заполните все поля.');
     return;

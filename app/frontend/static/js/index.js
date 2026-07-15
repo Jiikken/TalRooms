@@ -17,7 +17,6 @@
           const statusIcon = room.status === 1 ? 'fa-circle' : 'fa-circle';
           const statusColor = room.status === 1 ? '#2a9d8f' : '#e76f51';
           const statusText = room.status === 1 ? 'свободна' : 'занята';
-          console.log(room.start_time);
 
           html += `
             <div class="room-card" data-id="${room.id}">
