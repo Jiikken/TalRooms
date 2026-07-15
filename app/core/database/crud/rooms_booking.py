@@ -34,15 +34,15 @@ async def is_room_available_exists(
     exists_flag = result.scalar()
     return not exists_flag
 
-async def get_room_id_by_name(session: AsyncSession, name_room):
+async def get_room_by_id(session: AsyncSession, room_id):
     """Получение ID комнаты по имени"""
     stmt = (
-        select(Rooms.id)
-        .where(Rooms.name_room.ilike(name_room))
+        select(Rooms)
+        .where(Rooms.id == room_id)
     )
     result = await session.execute(stmt)
-    room_id = result.scalar_one_or_none()
-    return room_id
+    room = result.scalar_one()
+    return room
 
 async def update_status_room(session: AsyncSession, room_id, new_status):
     """Изменение статуса комнаты"""
