@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import select, or_, exists, update, join
+from sqlalchemy import select, or_, exists, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -80,3 +80,15 @@ async def create_booking(session: AsyncSession,
     await session.refresh(booking)
 
     return booking
+
+async def delete_booked_room(session: AsyncSession, room_id: int, date: datetime) -> bool:
+    """Удаление забронированной комнаты"""
+    stmt = (
+        delete(RoomsBooking)
+        .where(RoomsBooking.room_id == room_id, RoomsBooking.date == date)
+        .execution_options(synchronize_session=False)
+    )
+    result = await session.execute(stmt)
+    await session.commit()
+
+    return result.rowcount > 0
