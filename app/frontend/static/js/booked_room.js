@@ -1,6 +1,8 @@
 function renderBookingDetail(booking) {
   const container = document.getElementById('bookingContent');
-  console.log(booking)
+  const skeletonLoader = document.getElementById('skeletonLoader');
+  const date = skeletonLoader.dataset.bookingDate || '—';
+
 
   container.innerHTML = `
     <div class="detail-header">
@@ -18,7 +20,7 @@ function renderBookingDetail(booking) {
     <div class="detail-grid">
       <div class="detail-item">
         <span class="label"><i class="far fa-calendar-alt"></i> Дата</span>
-        <span class="value">${booking.date}</span>
+        <span class="value">${date}</span>
       </div>
       <div class="detail-item">
         <span class="label"><i class="far fa-clock"></i> Время</span>
@@ -69,7 +71,7 @@ function renderBookingDetail(booking) {
     </div>
   `;
 
-  document.getElementById('skeletonLoader').style.display = 'none';
+  skeletonLoader.style.display = 'none';
   container.style.display = 'block';
 }
 
