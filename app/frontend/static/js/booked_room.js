@@ -1,8 +1,10 @@
-function renderBookingDetail(booking) {
+async function renderBookingDetail(booking) {
   const container = document.getElementById('bookingContent');
   const skeletonLoader = document.getElementById('skeletonLoader');
   const date = skeletonLoader.dataset.bookingDate || '—';
-
+  const adminId = skeletonLoader.dataset.bookedById || '—';
+  const userResponse = await fetch('/user/get/user-by-id/' + adminId);
+  const userData = await userResponse.json();
 
   container.innerHTML = `
     <div class="detail-header">
@@ -31,30 +33,10 @@ function renderBookingDetail(booking) {
         <span class="value">${booking.capacity || '—'} чел.</span>
       </div>
       <div class="detail-item">
-        <span class="label"><i class="fas fa-calendar-check"></i> Забронировано</span>
-        <span class="value">${booking.bookedBy || '—'}</span>
+        <span class="label"><i class="fas fa-calendar-check"></i> Забронировал</span>
+        <span class="value">${userData.first_name} ${userData.last_name}</span>
       </div>
     </div>
-
-    ${booking.participants && booking.participants.length > 0 ? `
-      <div class="participants-section">
-        <h3><i class="fas fa-user-friends"></i> Участники</h3>
-        <div class="participants-list">
-          ${booking.participants.map(p => `
-            <span class="participant-chip">
-              <i class="fas fa-user"></i> ${p.name}
-              ${p.role ? `<span class="role">${p.role}</span>` : ''}
-            </span>
-          `).join('')}
-        </div>
-      </div>
-    ` : ''}
-
-    ${booking.description ? `
-      <div class="description-section">
-        <p><i class="fas fa-info-circle" style="color: #2a7de1; margin-right: 8px;"></i> ${booking.description}</p>
-      </div>
-    ` : ''}
 
     <div class="action-buttons">
       <button class="btn-action primary" onclick="alert('Редактирование бронирования')">
