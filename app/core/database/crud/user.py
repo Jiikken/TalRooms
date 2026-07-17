@@ -121,9 +121,7 @@ async def update_user_activity(session: AsyncSession, email: str, last_login: st
 async def is_room_available(session: AsyncSession, room_id: int, start: datetime, end: datetime) -> bool:
     """Свободна-ли комната"""
     stmt = select(RoomsBooking).where(
-        RoomsBooking.room_id == room_id,
-        RoomsBooking.start_time < end,
-        RoomsBooking.end_time > start
+        RoomsBooking.room_id == room_id
     )
     result = await session.execute(stmt)
     return result.first() is None
