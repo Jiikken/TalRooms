@@ -8,7 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database.connect import get_db
 from app.core.database.crud.rooms import get_all_rooms
-from app.core.database.crud.rooms_booking import create_booking, get_user_booking, get_booked_room_by_id, delete_booked_room
+from app.core.database.crud.rooms_booking import create_booking, get_user_booking, get_booked_room_by_id, \
+    delete_booked_room, get_booked_room_by_room_id_and_date
 from app.core.security.JWT import get_info_from_access_token
 
 router = APIRouter(prefix="/booking-rooms")
@@ -66,9 +67,23 @@ async def get_info_booked_room_by_id(room_id: int, session: AsyncSession = Depen
     return {"room": room}
 
 @router.get("/delete")
-async def delete_booked_room_endpoint(room_id: str, date: str, session: AsyncSession = Depends(get_db)):
+async def delete_booked_room_endpoint(request: Request, room_id: int, date: str, session: AsyncSession = Depends(get_db)):
     """Удаление забронированной комнаты"""
     format_date = datetime.strptime(date, "%Y-%m-%d")
+
+    booked_room = await get_booked_room_by_room_id_and_date(session, room_id, format_date)
+
+    token = request.cookies.get("access_token")
+    user_role = get_info_from_access_token(token, "role")
+    user_id = get_info_from_access_token(token, "user_id")
+
+    if user_role < 2:
+        if user_role == 1:
+            if user_id != booked_room["booked_by_id"] and user_id != booked_room["requested_by_id"]:
+                raise HTTPException(status_code=401, detail="Что-то пошло не по плану")
+        else:
+            raise HTTPException(status_code=401, detail="Пользователь не может удалять записи, это может делать только сотрудник или администратор")
+
     result = await delete_booked_room(session, int(room_id), format_date)
     return {"status": result}
 
