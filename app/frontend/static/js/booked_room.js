@@ -1,4 +1,4 @@
-async function renderBookingDetail(booking) {
+async function renderBookingDetail(booking, roomId) {
   const container = document.getElementById('bookingContent');
   const skeletonLoader = document.getElementById('skeletonLoader');
   const date = skeletonLoader.dataset.bookingDate || '—';
@@ -40,7 +40,7 @@ async function renderBookingDetail(booking) {
     </div>
 
     <div class="action-buttons">
-      <button class="btn-action primary" onclick="alert('Редактирование бронирования')">
+      <button class="btn-action primary" onclick="window.location.href = '/user/profile/${adminId}/edit-booked-room/${roomId}?date=${dateService}'">
         <i class="fas fa-edit"></i> Редактировать
       </button>
       <button class="btn-action danger" onclick="handlerDeleteBookedRoom(${booking.id}, '${dateService}')">
@@ -72,7 +72,7 @@ async function handlerDeleteBookedRoom(roomId, date) {
 // Функция загрузки данных с бекенда
 async function fetchBookingDetail(bookingId) {
   try {
-    const response = await fetch(`/booking-rooms/get/booked-room/` + bookingId, {
+    const response = await fetch(`/booking-rooms/get/room/` + bookingId, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ async function fetchBookingDetail(bookingId) {
     }
 
     const data = await response.json();
-    renderBookingDetail(data.room[0]);
+    renderBookingDetail(data.room[0], bookingId);
 
   } catch (error) {
     console.error('Ошибка загрузки деталей бронирования:', error);
