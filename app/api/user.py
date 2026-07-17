@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database.connect import get_db
-from app.core.database.crud.rooms_booking import get_room_by_id
+from app.core.database.crud.rooms_booking import get_room_by_id, get_booked_room_by_room_id_and_date
 from app.core.database.crud.user import get_user_info, get_user_by_id_bd, get_hashed_password
 from app.core.database.security import exists_user
 from app.core.security.JWT import get_info_from_access_token
@@ -69,6 +69,9 @@ async def get_user_by_id(user_id: int, request: Request, session: AsyncSession =
 @router.get("/profile/{user_id}/booked-room/{room_id}")
 async def booked_room(request: Request, user_id: int, room_id: int, date: str | None = None, admin_id: int | None = None, session: AsyncSession = Depends(get_db)):
     """Страница деталей бронированной комнаты"""
+    if room_id is None or date is None or admin_id is None:
+        raise HTTPException(status_code=404, detail="Not Found")
+
     token = request.cookies.get("access_token")
 
     if not token:
@@ -81,12 +84,18 @@ async def booked_room(request: Request, user_id: int, room_id: int, date: str | 
         raise HTTPException(status_code=404, detail="Пользователь не найден")
 
     current_user = await get_user_info(session, email)
-    if current_user["id"] != user_id:
-        raise HTTPException(status_code=404, detail="Страница не найдена")
-
-    room = await get_room_by_id(session, room_id)
-    today_date = datetime.now().strftime("%d.%m.%Y")
     format_date = datetime.strptime(date, "%Y-%m-%d")
+    _booked_room = await get_booked_room_by_room_id_and_date(session, room_id, format_date)
+    if _booked_room is None:
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    if current_user["access_lvl"] <= 1 and _booked_room["booked_by_id"] != user_id and _booked_room["requested_by_id"] != user_id:
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    elif current_user["id"] != user_id and current_user["access_lvl"] <= 1:
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    today_date = datetime.now().strftime("%d.%m.%Y")
     months = ["января", "февраля", "марта", "апреля", "мая", "июня",
               "июля", "августа", "сентября", "октября", "ноября", "декабря"]
     result_date = f"{format_date.day} {months[format_date.month - 1]} {format_date.year}"

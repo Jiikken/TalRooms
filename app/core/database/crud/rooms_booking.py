@@ -93,3 +93,24 @@ async def delete_booked_room(session: AsyncSession, room_id: int, date: datetime
     await session.commit()
 
     return result.rowcount > 0
+
+async def get_booked_room_by_room_id_and_date(session: AsyncSession, room_id: int, date: datetime):
+    """Получение забронированной комнаты по её ID и дате бронирования"""
+    stmt = (
+        select(RoomsBooking)
+        .where(RoomsBooking.room_id == room_id, RoomsBooking.date == date)
+    )
+    result = await session.execute(stmt)
+    room = result.scalar_one_or_none()
+
+    if room is None:
+        return None
+
+    return {
+        "id": room.id,
+        "room_id": room.room_id,
+        "booked_by_id": room.booked_by_id,
+        "requested_by_id": room.requested_by_id,
+        "date": room.date,
+        "create_at": room.created_at
+    }
