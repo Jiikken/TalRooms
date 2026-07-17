@@ -85,8 +85,10 @@ async def booked_room(request: Request, user_id: int, room_id: int, date: str | 
     if exists_token(token) is False:
         raise HTTPException(status_code=401, detail="Пользователь не авторизован")
 
-    if exists_parameters(room_id, date, admin_id) is False or exists_user(info_user) is False or exists_access_to_view(_booked_room, current_user, user_id):
-        raise HTTPException(status_code=404, detail="Not Found")
+    if (exists_parameters(room_id, date, admin_id) is False
+            or exists_user(info_user) is False
+            or exists_access_to_view(_booked_room, current_user, user_id) is False):
+        raise HTTPException(status_code=404, detail="Что-то пошло не по плану")
 
     return templates.TemplateResponse(request, "booked_room.html", context={"booking_date": result_date,
                                                                             "today_date": today_date,
