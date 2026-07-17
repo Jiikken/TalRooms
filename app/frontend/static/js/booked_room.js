@@ -2,6 +2,7 @@ async function renderBookingDetail(booking) {
   const container = document.getElementById('bookingContent');
   const skeletonLoader = document.getElementById('skeletonLoader');
   const date = skeletonLoader.dataset.bookingDate || '—';
+  const dateService = skeletonLoader.dataset.bookingDateService || '—';
   const adminId = skeletonLoader.dataset.bookedById || '—';
   const userResponse = await fetch('/user/get/user-by-id/' + adminId);
   const userData = await userResponse.json();
@@ -42,19 +43,30 @@ async function renderBookingDetail(booking) {
       <button class="btn-action primary" onclick="alert('Редактирование бронирования')">
         <i class="fas fa-edit"></i> Редактировать
       </button>
-      <button class="btn-action secondary" onclick="alert('Экспорт в календарь')">
-        <i class="fas fa-calendar-plus"></i> В календарь
+      <button class="btn-action danger" onclick="handlerDeleteBookedRoom(${booking.id}, '${dateService}')">
+        <i class="fas fa-times"></i> Отменить
       </button>
-      ${booking.status !== 'cancelled' ? `
-        <button class="btn-action danger" onclick="if(confirm('Отменить бронирование?')) alert('Бронирование отменено')">
-          <i class="fas fa-times"></i> Отменить
-        </button>
-      ` : ''}
     </div>
   `;
 
   skeletonLoader.style.display = 'none';
   container.style.display = 'block';
+}
+
+async function handlerDeleteBookedRoom(roomId, date) {
+  if (confirm('Отменить бронирование?')) {
+    const deleteRoomResponse = await fetch(`/booking-rooms/delete?room_id=${roomId}&date=${date}`);
+    const deleteRoomData = await deleteRoomResponse.json();
+    if (deleteRoomData.status){
+        alert('Бронирование отменено');
+        const userIdResponse = await fetch('/user/get/id');
+        const userId = await userIdResponse.json();
+
+        window.location.href = `/user/profile/${userId.user_id}`;
+        return;
+    }
+    alert('Что-то пошло не по плану');
+  }
 }
 
 // Функция загрузки данных с бекенда

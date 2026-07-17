@@ -90,7 +90,10 @@ async def booked_room(request: Request, user_id: int, room_id: int, date: str | 
     months = ["января", "февраля", "марта", "апреля", "мая", "июня",
               "июля", "августа", "сентября", "октября", "ноября", "декабря"]
     result_date = f"{format_date.day} {months[format_date.month - 1]} {format_date.year}"
-    return templates.TemplateResponse(request, "booked_room.html", context={"booking_date": result_date, "today_date": today_date, "booked_by_id": admin_id})
+    return templates.TemplateResponse(request, "booked_room.html", context={"booking_date": result_date,
+                                                                            "today_date": today_date,
+                                                                            "booked_by_id": admin_id,
+                                                                            "booking_date_service": date})
 
 @router.get("/profile/{user_id}")
 async def profile(request: Request, user_id: int, session: AsyncSession = Depends(get_db)):
