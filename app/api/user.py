@@ -8,9 +8,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database.connect import get_db
 from app.core.database.crud.rooms_booking import get_room_by_id, get_booked_room_by_room_id_and_date
 from app.core.database.crud.user import get_user_info, get_user_by_id_bd, get_hashed_password
-from app.core.database.security import exists_user
+from app.core.database.security import exists_user as exists_user_db
 from app.core.security.JWT import get_info_from_access_token
 from app.core.security.password import check_password
+from app.api.security.user import *
 
 router = APIRouter(prefix="/user", tags=["User"])
 
@@ -39,7 +40,7 @@ async def get_email_user(request: Request):
 @router.post("/check-user")
 async def check_exists_user(session: AsyncSession = Depends(get_db), email: str = Body(..., embed=True)):
     """Проверка существования пользователя в базе данных"""
-    exists = await exists_user(session, email)
+    exists = await exists_user_db(session, email)
     return {"exists": exists}
 
 @router.get("/check-auth")
@@ -69,36 +70,24 @@ async def get_user_by_id(user_id: int, request: Request, session: AsyncSession =
 @router.get("/profile/{user_id}/booked-room/{room_id}")
 async def booked_room(request: Request, user_id: int, room_id: int, date: str | None = None, admin_id: int | None = None, session: AsyncSession = Depends(get_db)):
     """Страница деталей бронированной комнаты"""
-    if room_id is None or date is None or admin_id is None:
-        raise HTTPException(status_code=404, detail="Not Found")
-
     token = request.cookies.get("access_token")
-
-    if not token:
-        raise HTTPException(status_code=401, detail="Пользователь не авторизован")
 
     email = get_info_from_access_token(token, "email")
 
     info_user = await get_user_by_id_bd(session, user_id)
-    if not info_user:
-        raise HTTPException(status_code=404, detail="Пользователь не найден")
-
     current_user = await get_user_info(session, email)
+
     format_date = datetime.strptime(date, "%Y-%m-%d")
     _booked_room = await get_booked_room_by_room_id_and_date(session, room_id, format_date)
-    if _booked_room is None:
-        raise HTTPException(status_code=404, detail="Not Found")
-
-    if current_user["access_lvl"] <= 1 and _booked_room["booked_by_id"] != user_id and _booked_room["requested_by_id"] != user_id:
-        raise HTTPException(status_code=404, detail="Not Found")
-
-    elif current_user["id"] != user_id and current_user["access_lvl"] <= 1:
-        raise HTTPException(status_code=404, detail="Not Found")
-
     today_date = datetime.now().strftime("%d.%m.%Y")
-    months = ["января", "февраля", "марта", "апреля", "мая", "июня",
-              "июля", "августа", "сентября", "октября", "ноября", "декабря"]
-    result_date = f"{format_date.day} {months[format_date.month - 1]} {format_date.year}"
+    result_date = formating_date(format_date)
+
+    if exists_token(token) is False:
+        raise HTTPException(status_code=401, detail="Пользователь не авторизован")
+
+    if exists_parameters(room_id, date, admin_id) is False or exists_user(info_user) is False or exists_access_to_view(_booked_room, current_user, user_id):
+        raise HTTPException(status_code=404, detail="Not Found")
+
     return templates.TemplateResponse(request, "booked_room.html", context={"booking_date": result_date,
                                                                             "today_date": today_date,
                                                                             "booked_by_id": admin_id,
