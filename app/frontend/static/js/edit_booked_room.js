@@ -110,6 +110,16 @@ async function handleSubmit(event, roomId, date) {
     return;
   }
 
+  const todayDateResponse = await fetch('/get/today');
+  const todayDateData = await todayDateResponse.json();
+
+  if (newDate < todayDateData.today_date){
+    alert('Дата должна быть не раньше сегодняшней');
+    saveButton.disabled = false;
+    saveButton.innerHTML = '<i class="fas fa-save"></i> Сохранить изменения';
+    return;
+  }
+
   try {
     const bookingId = getBookingIdFromUrl();
     const response = await fetch(`/booking-rooms/change-booked-room/${roomId}?date=${date}`, {

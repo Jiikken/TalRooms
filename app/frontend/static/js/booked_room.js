@@ -69,7 +69,6 @@ async function handlerDeleteBookedRoom(roomId, date) {
   }
 }
 
-// Функция загрузки данных с бекенда
 async function fetchBookingDetail(bookingId) {
   try {
     const response = await fetch(`/booking-rooms/get/room/` + bookingId, {
@@ -92,13 +91,10 @@ async function fetchBookingDetail(bookingId) {
 }
 
 function getBookingIdFromUrl() {
-  // Получаем текущий URL
   const url = window.location.pathname;
 
-  // Разбиваем URL на части
   const parts = url.split('/');
 
-  // Ищем индекс "booked-room" и берём следующий элемент
   const bookedRoomIndex = parts.indexOf('booked-room');
   if (bookedRoomIndex !== -1 && bookedRoomIndex + 1 < parts.length) {
     return parts[bookedRoomIndex + 1];
