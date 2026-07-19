@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database.connect import get_db
 from app.core.database.crud.rooms import get_all_rooms
 from app.core.database.crud.rooms_booking import create_booking, get_user_booking, get_room_by_id, \
-    delete_booked_room, get_booked_room_by_room_id_and_date, update_booked_room
+    delete_booked_room, get_booked_room_by_room_id_and_date, update_booked_room, get_all_booked_rooms
 from app.core.security.JWT import get_info_from_access_token
 
 router = APIRouter(prefix="/booking-rooms")
@@ -70,6 +70,12 @@ async def book_room(request: Request, session: AsyncSession = Depends(get_db)):
 
     return {"booking": booking_room}
 
+@router.get("/all-booked-rooms")
+async def _get_all_booked_rooms(session: AsyncSession = Depends(get_db)):
+    """Показывает все забронированные комнаты"""
+    all_booked_rooms = await get_all_booked_rooms(session)
+    return {"all_booked_rooms": all_booked_rooms}
+
 @router.get("/get/room/{room_id}")
 async def get_info_room_by_id(room_id: int, session: AsyncSession = Depends(get_db)):
     """Получение информации о бронировании комнаты по её ID"""
@@ -82,7 +88,6 @@ async def get_info_booked_room_by_id(date: str, room_id: int, session: AsyncSess
     format_date = datetime.strptime(date, "%Y-%m-%d")
     booked_room = await get_booked_room_by_room_id_and_date(session, room_id, format_date)
     return {"booked_room": booked_room}
-
 
 @router.get("/delete")
 async def delete_booked_room_endpoint(request: Request, room_id: int, date: str, session: AsyncSession = Depends(get_db)):

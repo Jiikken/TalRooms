@@ -116,3 +116,12 @@ async def update_booked_room(session: AsyncSession, room_id: int, date: datetime
     )
     await session.execute(stmt)
     await session.commit()
+
+async def get_all_booked_rooms(session: AsyncSession) -> list[RoomsBooking]:
+    """Получение всех забронированных комнат"""
+    stmt = (
+        select(RoomsBooking)
+        .order_by(RoomsBooking.id)
+    )
+    result = await session.scalars(stmt)
+    return list(result.all())
