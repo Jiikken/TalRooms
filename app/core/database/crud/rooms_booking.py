@@ -41,16 +41,6 @@ async def get_room_by_id(session: AsyncSession, room_id):
         .where(Rooms.id == room_id)
     )
     result = await session.execute(stmt)
-    room = result.scalar_one()
-    return room
-
-async def get_booked_room_by_id(session: AsyncSession, room_id):
-    """Получение ID комнаты по имени"""
-    stmt = (
-        select(Rooms)
-        .where(Rooms.id == room_id)
-    )
-    result = await session.execute(stmt)
     room = result.scalars().all()
     return room
 
@@ -99,6 +89,7 @@ async def get_booked_room_by_room_id_and_date(session: AsyncSession, room_id: in
     stmt = (
         select(RoomsBooking)
         .where(RoomsBooking.room_id == room_id, RoomsBooking.date == date)
+        .options(selectinload(RoomsBooking.room))
     )
     result = await session.execute(stmt)
     room = result.scalar_one_or_none()
@@ -112,5 +103,16 @@ async def get_booked_room_by_room_id_and_date(session: AsyncSession, room_id: in
         "booked_by_id": room.booked_by_id,
         "requested_by_id": room.requested_by_id,
         "date": room.date,
-        "create_at": room.created_at
+        "create_at": room.created_at,
+        "room": room.room
     }
+
+async def update_booked_room(session: AsyncSession, room_id: int, date: datetime, new_room_id: int, new_date: datetime):
+    """Обновление данных забронированной комнаты"""
+    stmt = (
+        update(RoomsBooking)
+        .where(RoomsBooking.room_id == room_id, RoomsBooking.date == date)
+        .values(room_id=new_room_id, date=new_date)
+    )
+    await session.execute(stmt)
+    await session.commit()

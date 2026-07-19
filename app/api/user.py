@@ -95,6 +95,12 @@ async def booked_room(request: Request, user_id: int, room_id: int, date: str | 
                                                                             "booked_by_id": admin_id,
                                                                             "booking_date_service": date})
 
+@router.get("/profile/{user_id}/edit-booked-room/{room_id}")
+async def edit_booked_room(request: Request, date: str, room_id: int):
+    """Редактирование забронированной комнаты"""
+    return templates.TemplateResponse(request, "edit_booked_room.html", context={"room_id": room_id,
+                                                                                 "date": date})
+
 @router.get("/profile/{user_id}")
 async def profile(request: Request, user_id: int, session: AsyncSession = Depends(get_db)):
     """Страница профиля пользователя"""

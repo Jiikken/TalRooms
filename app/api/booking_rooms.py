@@ -1,15 +1,15 @@
 from datetime import datetime
 from pathlib import Path
 
-from fastapi import APIRouter, Response, Request, HTTPException
+from fastapi import APIRouter, Response, Request, HTTPException, Body
 from fastapi.params import Depends
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database.connect import get_db
 from app.core.database.crud.rooms import get_all_rooms
-from app.core.database.crud.rooms_booking import create_booking, get_user_booking, get_booked_room_by_id, \
-    delete_booked_room, get_booked_room_by_room_id_and_date
+from app.core.database.crud.rooms_booking import create_booking, get_user_booking, get_room_by_id, \
+    delete_booked_room, get_booked_room_by_room_id_and_date, update_booked_room
 from app.core.security.JWT import get_info_from_access_token
 
 router = APIRouter(prefix="/booking-rooms")
@@ -44,6 +44,16 @@ async def all_rooms(session: AsyncSession = Depends(get_db)):
     rooms_list = await get_all_rooms(session)
     return {"rooms": rooms_list}
 
+@router.put("/change-booked-room/{room_id}")
+async def change_booked_room(room_id: int, date: str, data: dict = Body(...), session: AsyncSession = Depends(get_db)):
+    """Внесение изменений в бронь комнаты"""
+    new_room_id = data.get("newRoomId")
+    new_date = datetime.strptime(data.get("newDate"), "%Y-%m-%d")
+    formated_date = datetime.strptime(date, "%Y-%m-%d")
+    await update_booked_room(session, room_id, formated_date, new_room_id, new_date)
+
+    return {"status": "ok"}
+
 @router.post("/book-room")
 async def book_room(request: Request, session: AsyncSession = Depends(get_db)):
     """Получение данных аренды комнаты"""
@@ -60,11 +70,19 @@ async def book_room(request: Request, session: AsyncSession = Depends(get_db)):
 
     return {"booking": booking_room}
 
-@router.get("/get/booked-room/{room_id}")
-async def get_info_booked_room_by_id(room_id: int, session: AsyncSession = Depends(get_db)):
+@router.get("/get/room/{room_id}")
+async def get_info_room_by_id(room_id: int, session: AsyncSession = Depends(get_db)):
     """Получение информации о бронировании комнаты по её ID"""
-    room = await get_booked_room_by_id(session, room_id)
+    room = await get_room_by_id(session, room_id)
     return {"room": room}
+
+@router.get("/get/booked-room/{room_id}")
+async def get_info_booked_room_by_id(request: Request, date: str, room_id: int, session: AsyncSession = Depends(get_db)):
+    """Получение информации о забронированной комнате из таблицы БД RoomsBooking"""
+    format_date = datetime.strptime(date, "%Y-%m-%d")
+    booked_room = await get_booked_room_by_room_id_and_date(session, room_id, format_date)
+    return {"booked_room": booked_room}
+
 
 @router.get("/delete")
 async def delete_booked_room_endpoint(request: Request, room_id: int, date: str, session: AsyncSession = Depends(get_db)):
