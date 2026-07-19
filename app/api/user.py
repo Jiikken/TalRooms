@@ -93,7 +93,8 @@ async def booked_room(request: Request, user_id: int, room_id: int, date: str | 
     return templates.TemplateResponse(request, "booked_room.html", context={"booking_date": result_date,
                                                                             "today_date": today_date,
                                                                             "booked_by_id": admin_id,
-                                                                            "booking_date_service": date})
+                                                                            "booking_date_service": date,
+                                                                            "user_id": info_user.get("id")})
 
 @router.get("/profile/{user_id}/edit-booked-room/{room_id}")
 async def edit_booked_room(request: Request, date: str, room_id: int):
