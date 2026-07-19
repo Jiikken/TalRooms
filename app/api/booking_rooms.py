@@ -77,7 +77,7 @@ async def get_info_room_by_id(room_id: int, session: AsyncSession = Depends(get_
     return {"room": room}
 
 @router.get("/get/booked-room/{room_id}")
-async def get_info_booked_room_by_id(request: Request, date: str, room_id: int, session: AsyncSession = Depends(get_db)):
+async def get_info_booked_room_by_id(date: str, room_id: int, session: AsyncSession = Depends(get_db)):
     """Получение информации о забронированной комнате из таблицы БД RoomsBooking"""
     format_date = datetime.strptime(date, "%Y-%m-%d")
     booked_room = await get_booked_room_by_room_id_and_date(session, room_id, format_date)
