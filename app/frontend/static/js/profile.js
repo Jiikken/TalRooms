@@ -27,6 +27,18 @@ async function createBookButton() {
   container.insertBefore(newButton, container.firstChild);
 }
 
+async function createViewAllBookedButton() {
+  const container = document.getElementById('bookContainer');
+  const newButton = document.createElement('button');
+  newButton.className = 'btn-edit';
+  newButton.innerHTML = '<i class="fas fa-calendar-plus"></i> Посмотреть все брони';
+  newButton.addEventListener('click', function() {
+    window.location.href = '/all-booked-rooms';
+  });
+
+  container.insertBefore(newButton, container.firstChild);
+}
+
 async function createAppendEmployeeButton() {
   const container = document.getElementById('editContainer');
   const newButton = document.createElement('button');
@@ -45,6 +57,7 @@ async function updateButtons() {
   }
   if (roleData.role === 2){
      createAppendEmployeeButton();
+     createViewAllBookedButton();
   }
 }
 
