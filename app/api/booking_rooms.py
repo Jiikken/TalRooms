@@ -70,11 +70,16 @@ async def book_room(request: Request, session: AsyncSession = Depends(get_db)):
 
     return {"booking": booking_room}
 
-@router.get("/all-booked-rooms")
+@router.get("/get/all-booked-rooms")
 async def _get_all_booked_rooms(session: AsyncSession = Depends(get_db)):
-    """Показывает все забронированные комнаты"""
+    """Возвращает все забронированные комнаты"""
     all_booked_rooms = await get_all_booked_rooms(session)
     return {"all_booked_rooms": all_booked_rooms}
+
+@router.get("/all-booked-rooms")
+async def show_all_booked_rooms(request: Request):
+    """Страница со всеми забронированными комнатами для администрации"""
+    return templates.TemplateResponse(request, "all_booked_rooms.html")
 
 @router.get("/get/room/{room_id}")
 async def get_info_room_by_id(room_id: int, session: AsyncSession = Depends(get_db)):

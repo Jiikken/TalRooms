@@ -73,7 +73,6 @@ async def create_booking(session: AsyncSession,
 
 async def delete_booked_room(session: AsyncSession, room_id: int, date: datetime) -> bool:
     """Удаление забронированной комнаты"""
-    print(date)
     stmt = (
         delete(RoomsBooking)
         .where(RoomsBooking.room_id == room_id, RoomsBooking.date == date)
