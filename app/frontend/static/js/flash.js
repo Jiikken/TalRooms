@@ -100,5 +100,3 @@ class FlashManager {
 }
 
 const flashManager = new FlashManager();
-
-window.flashManager = flashManager;

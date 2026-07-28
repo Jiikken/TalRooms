@@ -50,10 +50,11 @@ async function deleteBooking(roomId, date) {
     const deleteStatus = deleteData.status;
 
     if (deleteStatus){
-      alert(`Бронирование комнаты #${roomId} удалено`);
+      flashMessage.success(`Бронирование комнаты #${roomId} удалено`);
       fetchBookings();
+      return;
     }
-    alert(`Удаление сорвалось`);
+    flashMessage.error(`Удаление сорвалось`);
   }
 }
 

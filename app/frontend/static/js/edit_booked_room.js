@@ -114,7 +114,7 @@ async function handleSubmit(event, roomId, date) {
   const todayDateData = await todayDateResponse.json();
 
   if (newDate < todayDateData.today_date){
-    alert('Дата должна быть не раньше сегодняшней');
+    flashMessage.error('Дата должна быть не раньше сегодняшней');
     saveButton.disabled = false;
     saveButton.innerHTML = '<i class="fas fa-save"></i> Сохранить изменения';
     return;

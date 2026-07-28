@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', path='styles/flash.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', path='styles/all_booked_rooms.css') }}">
 </head>
 <body>
@@ -38,6 +39,7 @@
   </header>
 
   <div class="container">
+    <div class="flash-container" id="flashContainer"></div>
     <div class="page-header">
       <div class="page-title">
         <i class="fas fa-calendar-check"></i>
@@ -89,6 +91,7 @@
       <div id="bookingsContent" style="display: none;"></div>
     </div>
   </div>
+  <script src=" {{ url_for('static', path='js/flash.js') }}"></script>
   <script src="{{ url_for('static', path='js/utils/auth.js') }}"></script>
   <script src="{{ url_for('static', path='js/all_booked_rooms.js') }}"></script>
 </body>

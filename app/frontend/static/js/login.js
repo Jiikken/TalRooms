@@ -4,7 +4,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
   const password = document.getElementById('password').value;
 
   if (!email || !password) {
-    alert('⚠️ Пожалуйста, заполните все поля');
+    flashMessage.error('⚠️ Пожалуйста, заполните все поля');
     return;
   }
 
@@ -43,20 +43,20 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         document.body.appendChild(form);
         form.submit();
       } else {
-        alert("Неверный пароль");
+        flashMessage.error("Неверный пароль");
       }
     } else {
-      alert('❌ Пользователь не зарегистрирован');
+      flashMessage.error('❌ Пользователь не зарегистрирован');
     }
   } catch (error) {
     console.error('Ошибка:', error);
-    alert('⚠️ Ошибка сервера. Попробуйте позже');
+    flashMessage.error('⚠️ Ошибка сервера. Попробуйте позже');
   }
 });
 
 document.querySelectorAll('.social-btn').forEach(btn => {
   btn.addEventListener('click', function() {
     const provider = this.classList.contains('google') ? 'Google' : 'GitHub';
-    alert(`🔐 Вход через ${provider} (демо-режим)`);
+    flashMessage.info(`🔐 Вход через ${provider} (демо-режим)`);
   });
 });

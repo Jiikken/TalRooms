@@ -44,7 +44,9 @@ async function createAppendEmployeeButton() {
   const newButton = document.createElement('button');
   newButton.className = 'btn-edit';
   newButton.innerHTML = '<i class="fas fa-pen"></i> Редактировать штат'
-
+  newButton.addEventListener('click', function() {
+    flashManager.show("Редактирование штата");
+  });
   container.insertBefore(newButton, container.firstChild)
 }
 

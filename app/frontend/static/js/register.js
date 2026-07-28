@@ -108,7 +108,7 @@ form.addEventListener('submit', async function(e) {
   const confirm = confirmInput.value;
 
   if (!firstName || !lastName || !email || !password || !confirm) {
-    alert('⚠️ Пожалуйста, заполните все поля');
+    flashMessage.warning('⚠️ Пожалуйста, заполните все поля');
     return;
   }
 
@@ -116,24 +116,24 @@ form.addEventListener('submit', async function(e) {
   if (!emailRegex.test(email)) {
     emailInput.classList.add('error');
     emailError.classList.add('show');
-    alert('⚠️ Введите корректный email');
+    flashMessage.warning('⚠️ Введите корректный email');
     return;
   }
 
   if (password.length < 8) {
-    alert('⚠️ Пароль должен содержать минимум 8 символов');
+    flashMessage.warning('⚠️ Пароль должен содержать минимум 8 символов');
     return;
   }
 
   if (password !== confirm) {
     confirmInput.classList.add('error');
     passwordError.classList.add('show');
-    alert('⚠️ Пароли не совпадают');
+    flashMessage.warning('⚠️ Пароли не совпадают');
     return;
   }
 
   if (!termsCheckbox.checked) {
-    alert('⚠️ Пожалуйста, примите условия использования');
+    flashMessage.warning('⚠️ Пожалуйста, примите условия использования');
     return;
   }
 
@@ -167,17 +167,17 @@ form.addEventListener('submit', async function(e) {
         document.body.appendChild(_form);
         _form.submit();
     } else {
-      alert('❌ Пользователь с таким email уже существует');
+      flashMessage.error('❌ Пользователь с таким email уже существует');
     }
   } catch (error) {
     console.error('Ошибка:', error);
-    alert('⚠️ Ошибка сервера. Попробуйте позже');
+    flashMessage.error('⚠️ Ошибка сервера. Попробуйте позже');
   }
 });
 
 document.querySelectorAll('.social-btn').forEach(btn => {
   btn.addEventListener('click', function() {
     const provider = this.classList.contains('google') ? 'Google' : 'GitHub';
-    alert(`🔐 Регистрация через ${provider} (демо-режим)`);
+    flashMessage.info(`🔐 Регистрация через ${provider} (демо-режим)`);
   });
 });
