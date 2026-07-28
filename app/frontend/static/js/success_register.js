@@ -1,4 +1,4 @@
-function getQueryParams() {
+    function getQueryParams() {
   const params = new URLSearchParams(window.location.search);
   return {
     firstName: params.get('firstName') || 'Иван',

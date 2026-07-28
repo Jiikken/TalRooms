@@ -103,12 +103,12 @@ async function handleBooking(event) {
   const todayDateData = await todayDateResponse.json();
 
   if (date < todayDateData.today_date){
-    flashMessage.error('Дата должна быть не раньше сегодняшней');
+    flashManager.error('Дата должна быть не раньше сегодняшней');
     return;
   }
 
   if (!clientId || !roomId || !date) {
-    flashMessage.error('⚠️ Пожалуйста, заполните все поля.');
+    flashManager.error('⚠️ Пожалуйста, заполните все поля.');
     return;
   }
 
@@ -116,7 +116,7 @@ async function handleBooking(event) {
   const userExistsData = await userExistsResponse.json();
 
   if (!userExistsData){
-    flashMessage.warning('Пользователя нет или он неактивен');
+    flashManager.warning('Пользователя нет или он неактивен');
     return;
   }
 
@@ -129,7 +129,7 @@ async function handleBooking(event) {
   const dataResponse = await response.json();
 
   if (dataResponse.booking == 'null'){
-    flashMessage.error('Комната уже забронирована на это время');
+    flashManager.error('Комната уже забронирована на это время');
     return;
   }
 
@@ -140,7 +140,7 @@ async function handleBooking(event) {
     `📅 Дата: ${date}\n` +
     `Статус: подтверждено`;
 
-  flashMessage.info(message);
+  flashManager.info(message);
 }
 
 document.addEventListener('DOMContentLoaded', function() {

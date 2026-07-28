@@ -58,14 +58,14 @@ async function handlerDeleteBookedRoom(roomId, date) {
     const deleteRoomResponse = await fetch(`/booking-rooms/delete?room_id=${roomId}&date=${date}`);
     const deleteRoomData = await deleteRoomResponse.json();
     if (deleteRoomData.status){
-        flashMessage.success('Бронирование отменено');
+        flashManager.success('Бронирование отменено');
         const userIdResponse = await fetch('/user/get/id');
         const userId = await userIdResponse.json();
 
         window.location.href = `/user/profile/${userId.user_id}`;
         return;
     }
-    flashMessage.error('Что-то пошло не по плану');
+    flashManager.error('Что-то пошло не по плану');
   }
 }
 

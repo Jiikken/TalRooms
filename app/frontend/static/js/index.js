@@ -63,14 +63,14 @@ async function removeToBookingPage(roomId) {
         const userIsAuthResponse = await fetch('/user/check-auth');
         const userIsAuthData = await userIsAuthResponse.json();
         if (!userIsAuthData.authenticated){
-            flashMessage.info('Для начала нужно авторизоваться');
+            flashManager.info('Для начала нужно авторизоваться');
             return;
         }
 
         const userRoleResponse = await fetch('/user/get/role');
         const userRoleData = await userRoleResponse.json();
         if (userRoleData.role < 1){
-            flashMessage.info('Для аренды комнаты обратитесь к сотрудникам компании');
+            flashManager.info('Для аренды комнаты обратитесь к сотрудникам компании');
             return;
         }
 
@@ -86,11 +86,11 @@ async function removeToBookingPage(roomId) {
             window.location.href = '/booking-rooms';
         } else {
             const error = await response.json();
-            flashMessage.error(`${error.detail}`);
+            flashManager.error(`${error.detail}`);
         }
     } catch (error) {
         console.error('Ошибка:', error);
-        flashMessage.error('Произошла ошибка при выборе комнаты');
+        flashManager.error('Произошла ошибка при выборе комнаты');
     }
 }
 
