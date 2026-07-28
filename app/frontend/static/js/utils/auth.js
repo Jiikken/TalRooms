@@ -34,8 +34,8 @@ async function createAuthButton(type) {
   }
 }
 
-const authButton = document.getElementById('authButton');
-const authButtonText = document.getElementById('authButtonText');
+let authButton = document.getElementById('authButton');
+let authButtonText = document.getElementById('authButtonText');
 
 async function updateAuthButton() {
   const response = await fetch('/user/check-auth');
