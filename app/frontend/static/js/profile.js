@@ -33,7 +33,7 @@ async function createViewAllBookedButton() {
   newButton.className = 'btn-edit';
   newButton.innerHTML = '<i class="fas fa-calendar-plus"></i> Посмотреть все брони';
   newButton.addEventListener('click', function() {
-    window.location.href = '/all-booked-rooms';
+    window.location.href = '/booking-rooms/all-booked-rooms';
   });
 
   container.insertBefore(newButton, container.firstChild);

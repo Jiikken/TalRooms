@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Редактирование бронирования · MeetSpace</title>
+  <title>Редактирование бронирования | TalRooms</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
@@ -13,21 +13,27 @@
 <body>
   <header class="header">
     <div class="header-left">
-      <div class="logo-icon"><i class="fas fa-phone-alt"></i></div>
-      <div class="brand">Meet<span>Space</span></div>
+      <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 12px;">
+        <div class="logo-icon"><i class="fas fa-phone-alt"></i></div>
+        <div class="brand">Tal<span>Rooms</span></div>
+      </a>
     </div>
     <div class="header-right">
       <div class="header-badge">
-        <i class="fas fa-bell"></i> 3 уведомления
+        <i class="fas fa-bell"></i> Уведомлений нет
       </div>
       <div class="divider"></div>
-      <button class="btn-outline">
-        <i class="fas fa-calendar-alt"></i>
-        <span>Сегодня</span>
-      </button>
-      <button class="btn-primary">
-        <i class="fas fa-sign-in-alt"></i> Вход
-      </button>
+      <div class="header-badge" style="background: transparent; border: none; padding: 0;">
+        <i class="fas fa-calendar-alt" style="color: #2a7de1;"></i>
+        <span style="font-weight: 500; color: #1f2a44;">{{ today_date }}</span>
+      </div>
+      <div id="authContainer">
+        <a href="/auth/login" style="text-decoration: none;">
+          <button id="authButton" class="btn-primary">
+            <i class="fas fa-sign-in-alt"></i> Вход
+          </button>
+        </a>
+      </div>
     </div>
   </header>
 
