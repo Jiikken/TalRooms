@@ -8,9 +8,11 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.security.user import check_owner
 from app.core.database.connect import get_db
 from app.core.database.crud.user import create_user, update_user_activity
 from app.core.security.JWT import create_access_token
+from app.schemas.user import UserCreate, UserResponse
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -26,21 +28,26 @@ async def register(request: Request):
     """Страница регистрации"""
     return templates.TemplateResponse(request, "register.html")
 
-@router.post("/register-user")
-async def register_user(request: Request, session: AsyncSession = Depends(get_db),
-                        firstname: str = Form(..., alias="firstName"),
-                        lastname: str = Form(..., alias="lastName"),
-                        email: str = Form(...),
-                        password: str = Form(...)):
-    """Страница успешной регистрации нового пользователя"""
-    try:
-        await create_user(firstname, lastname, email, password, session)
-        return templates.TemplateResponse(request, "success_register.html",
-                                          {"firstname": firstname,
-                                                "lastname": lastname,
-                                                "email": email})
-    except ValueError:
-        return templates.TemplateResponse(request, "register.html")
+@router.post("/register-user", response_model=UserResponse)
+async def register_user(response: Response, request: Request, user: UserCreate, session: AsyncSession = Depends(get_db)):
+    """Регистрация пользователя"""
+    new_user = await create_user(user, session)
+
+    if request.cookies.get("access_token_reg"):
+        response.delete_cookie("access_token_reg")
+    token = create_access_token({"user_id": new_user.id})
+    response.set_cookie(key="access_token_reg", value=token, httponly=True)
+
+    return UserResponse.model_validate(new_user)
+
+@router.get("/success-register/{user_id}")
+async def success_register(request: Request, current_user: UserResponse = Depends(check_owner)):
+    """Страница успешной регистрации пользователя"""
+    return templates.TemplateResponse(request,
+                                      "success_register.html",
+                                      context={"firstname": current_user.first_name,
+                                               "lastname": current_user.last_name,
+                                               "email": current_user.email})
 
 @router.post("/login-user")
 async def login_user(request: Request, response: Response, email: str = Form(...), session: AsyncSession = Depends(get_db)):
@@ -56,6 +63,9 @@ async def login_user(request: Request, response: Response, email: str = Form(...
         "role": user.get("access_lvl")
     })
 
+    if request.cookies.get("access_token"):
+        response.delete_cookie("access_token")
+
     response.set_cookie(
         key="access_token",
         value=token,
@@ -65,6 +75,7 @@ async def login_user(request: Request, response: Response, email: str = Form(...
         max_age=1800,
         path="/"
     )
+    response.delete_cookie("access_token_reg")
 
     return templates.TemplateResponse(request,
                                       "success_login.html",

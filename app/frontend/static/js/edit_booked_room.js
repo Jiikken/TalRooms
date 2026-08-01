@@ -1,17 +1,5 @@
 let currentBooking = null;
 
-function showToast(message, type = 'success') {
-  const toast = document.getElementById('toast');
-  const toastMessage = document.getElementById('toastMessage');
-  toast.className = `toast ${type}`;
-  toastMessage.textContent = message;
-  toast.classList.add('show');
-
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3000);
-}
-
 async function populateRooms(selectedId) {
   const select = document.getElementById('roomSelect');
   select.innerHTML = '<option value="">Выберите комнату...</option>';
@@ -71,7 +59,7 @@ async function fetchBookingData(bookingId) {
   } catch (error) {
     console.error('Ошибка загрузки данных для редактирования:', error);
 
-    showToast('Не удалось загрузить данные с сервера', 'error');
+    flashManager.error('Не удалось загрузить данные с сервера');
   }
 }
 
@@ -104,7 +92,7 @@ async function handleSubmit(event, roomId, date) {
   };
 
   if (!formData.newRoomId) {
-    showToast('Пожалуйста, выберите комнату', 'error');
+    flashManager.error('Пожалуйста, выберите комнату');
     saveButton.disabled = false;
     saveButton.innerHTML = '<i class="fas fa-save"></i> Сохранить изменения';
     return;
@@ -135,7 +123,7 @@ async function handleSubmit(event, roomId, date) {
     }
 
     const result = await response.json();
-    showToast('Бронирование успешно обновлено!', 'success');
+    flashManager.success('Бронирование успешно обновлено!');
 
     const bookedRoomResponse = await fetch(`/booking-rooms/get/booked-room/${newRoomId}?date=${newDate}`);
     const bookedRoomData = await bookedRoomResponse.json();
@@ -151,7 +139,7 @@ async function handleSubmit(event, roomId, date) {
 
   } catch (error) {
     console.error('Ошибка сохранения:', error);
-    showToast('Ошибка при сохранении. Попробуйте снова.', 'error');
+    flashManager.error('Ошибка при сохранении. Попробуйте снова.');
     saveButton.disabled = false;
     saveButton.innerHTML = '<i class="fas fa-save"></i> Сохранить изменения';
   }

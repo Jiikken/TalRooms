@@ -23,21 +23,31 @@ async def create_user(user: UserCreate, session: AsyncSession):
     await session.refresh(user)
     return user
 
-async def get_user_info(session: AsyncSession, email: str) -> dict | None:
-    """Получение имени и фамилии пользователя"""
-    stmt = (select(User.id, User.first_name, User.last_name, User.role, User.is_active, User.created, User.last_login)
-            .where(User.email.ilike(email))
-    )
+async def get_user_info(session: AsyncSession, email: str = None, user_id: int = None) -> dict | None:
+    """Получение информации о пользователе"""
+    if email:
+        stmt = (select(User.id, User.first_name, User.last_name, User.role, User.is_active, User.created, User.last_login)
+                .where(User.email.ilike(email))
+        )
+    elif user_id:
+        stmt = (
+            select(User.id, User.first_name, User.last_name, User.email, User.role, User.is_active, User.created, User.last_login)
+            .where(User.id == user_id)
+            )
+    else:
+        return None
+
     result = await session.execute(stmt)
     row = result.first()
 
     return {"id": row[0],
             "first_name": row[1],
             "last_name": row[2],
-            "access_lvl": row[3],
-            "is_active": row[4],
-            "created": row[5],
-            "last_login": row[6]
+            "email": row[3],
+            "access_lvl": row[4],
+            "is_active": row[5],
+            "created": row[6],
+            "last_login": row[7]
             } or None
 
 async def get_user_by_id_bd(session: AsyncSession, user_id: int) -> dict | None:

@@ -108,7 +108,7 @@ form.addEventListener('submit', async function(e) {
   const confirm = confirmInput.value;
 
   if (!firstName || !lastName || !email || !password || !confirm) {
-    flashManager.warning('⚠️ Пожалуйста, заполните все поля');
+    flashManager.warning('Пожалуйста, заполните все поля');
     return;
   }
 
@@ -116,24 +116,24 @@ form.addEventListener('submit', async function(e) {
   if (!emailRegex.test(email)) {
     emailInput.classList.add('error');
     emailError.classList.add('show');
-    flashManager.warning('⚠️ Введите корректный email');
+    flashManager.warning('Введите корректный email');
     return;
   }
 
   if (password.length < 8) {
-    flashManager.warning('⚠️ Пароль должен содержать минимум 8 символов');
+    flashManager.warning('Пароль должен содержать минимум 8 символов');
     return;
   }
 
   if (password !== confirm) {
     confirmInput.classList.add('error');
     passwordError.classList.add('show');
-    flashManager.warning('⚠️ Пароли не совпадают');
+    flashManager.warning('Пароли не совпадают');
     return;
   }
 
   if (!termsCheckbox.checked) {
-    flashManager.warning('⚠️ Пожалуйста, примите условия использования');
+    flashManager.warning('Пожалуйста, примите условия использования');
     return;
   }
 
@@ -151,27 +151,32 @@ form.addEventListener('submit', async function(e) {
     const _resultCheckUser = await _responseCheckUser.json();
 
     if (!_resultCheckUser.exists) {
-        const _form = document.createElement('form');
-        _form.method = 'POST';
-        _form.action = '/auth/register-user';
+        const response = await fetch('/auth/register-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({firstname: firstName, lastname: lastName, email, password})
+        });
 
-        const fields = { firstName, lastName, email, password };
-        for (const [key, value] of Object.entries(fields)) {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = value;
-          _form.appendChild(input);
+        if (!response.ok) {
+            throw new Error('Ошибка регистрации');
+            return;
         }
+        const dataResponse = await response.json();
+        const userId = dataResponse.id;
 
-        document.body.appendChild(_form);
-        _form.submit();
+        flashManager.success("Аккаунт успешно зарегистрирован!");
+
+        setTimeout(() => {
+          window.location.href = `/auth/success-register/${userId}`;
+        }, 1500);
     } else {
-      flashManager.error('❌ Пользователь с таким email уже существует');
+      flashManager.error('Пользователь с таким email уже существует');
     }
   } catch (error) {
     console.error('Ошибка:', error);
-    flashManager.error('⚠️ Ошибка сервера. Попробуйте позже');
+    flashManager.error('Ошибка сервера. Попробуйте позже');
   }
 });
 
