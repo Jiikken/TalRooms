@@ -12,7 +12,7 @@ from app.api.security.user import check_owner
 from app.core.database.connect import get_db
 from app.core.database.crud.user import create_user, update_user_activity
 from app.core.security.JWT import create_access_token
-from app.schemas.user import UserCreate, UserResponse
+from app.schemas.user import UserCreate, UserResponse, UserLogin
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -50,17 +50,18 @@ async def success_register(request: Request, current_user: UserResponse = Depend
                                                "email": current_user.email})
 
 @router.post("/login-user")
-async def login_user(request: Request, response: Response, email: str = Form(...), session: AsyncSession = Depends(get_db)):
+async def login_user(request: Request, response: Response, user_login: UserLogin, session: AsyncSession = Depends(get_db)):
     """Страница успешной авторизации пользователя"""
     now = datetime.now(timezone.utc)
     utctime_and_date_now = now.strftime("%Y.%m.%d %H:%M")
-    email = unquote(email)
-    user = await update_user_activity(session, email, is_active=True, last_login=utctime_and_date_now)
-    user_id = user.get("id")
+
+    user_update = await update_user_activity(session, str(user_login.email), is_active=True, last_login=utctime_and_date_now)
+    user = UserResponse.model_validate(user_update)
+
     token = create_access_token({
-        "email": email,
-        "user_id": user_id,
-        "role": user.get("access_lvl")
+        "email": user.email,
+        "user_id": user.id,
+        "role": user.access_lvl
     })
 
     if request.cookies.get("access_token"):
@@ -79,11 +80,11 @@ async def login_user(request: Request, response: Response, email: str = Form(...
 
     return templates.TemplateResponse(request,
                                       "success_login.html",
-                                      {"firstname": user.get("first_name"),
-                                       "lastname": user.get("last_name"),
-                                       "email": email,
-                                       "last_login": user.get("last_login"),
-                                       "user_id": user_id
+                                      {"firstname": user.first_name,
+                                       "lastname": user.last_name,
+                                       "email": user.email,
+                                       "last_login": user.last_login,
+                                       "user_id": user.id
                                        },
                                       headers=response.headers
                                       )
