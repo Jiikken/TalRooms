@@ -6,15 +6,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.security.password import hash_password
 from app.models.user import User, RoomsBooking
+from app.schemas.user import UserCreate
 
 
-async def create_user(first_name: str, last_name: str, email: str, password: str, session: AsyncSession):
+async def create_user(user: UserCreate, session: AsyncSession):
     """Создание нового пользователя"""
-    hashed_password = hash_password(password)[:255]
+    hashed_password = hash_password(user.password)[:255]
     user = User(
-        first_name=first_name,
-        last_name=last_name,
-        email=email,
+        first_name=user.firstname,
+        last_name=user.lastname,
+        email=user.email,
         hashed_password=hashed_password
     )
     session.add(user)
