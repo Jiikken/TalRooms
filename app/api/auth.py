@@ -1,8 +1,7 @@
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import unquote
 
-from fastapi import APIRouter, Request, Form, Response
+from fastapi import APIRouter, Request, Response
 from fastapi.params import Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -41,7 +40,7 @@ async def register_user(response: Response, request: Request, user: UserCreate, 
 
     return UserResponse.model_validate(new_user)
 
-@router.get("/success-register/{user_id}")
+@router.get("/success-register")
 async def success_register(request: Request, current_user: UserResponse = Depends(check_owner)):
     """Страница успешной регистрации пользователя"""
     return templates.TemplateResponse(request,
@@ -61,16 +60,19 @@ async def login_user(request: Request, response: Response, user_login: UserLogin
 
     update_tokens_login(request, response, user)
 
+    return user
+
+@router.get("/success-login")
+async def success_login(request: Request, response: Response, user: UserResponse = Depends(check_owner)):
+    """Страница успешной авторизации пользователя"""
     return templates.TemplateResponse(request,
                                       "success_login.html",
                                       {"firstname": user.first_name,
                                        "lastname": user.last_name,
                                        "email": user.email,
                                        "last_login": user.last_login,
-                                       "user_id": user.id
-                                       },
-                                      headers=response.headers
-                                      )
+                                       "user_id": user.id},
+                                      headers=response.headers)
 
 @router.post("/logout")
 async def logout_user(response: Response):
