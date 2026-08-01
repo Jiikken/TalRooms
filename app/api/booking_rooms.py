@@ -9,7 +9,6 @@ from app.core.database.crud.rooms import get_all_rooms
 from app.core.database.crud.rooms_booking import create_booking, get_user_booking, get_room_by_id, \
     delete_booked_room, update_booked_room, get_all_booked_rooms
 from app.core.database.crud.rooms_booking import get_booked_room_by_room_id_and_date
-from app.core.database.crud.user import get_user_by_id_bd
 
 router = APIRouter(prefix="/booking-rooms")
 
@@ -17,7 +16,7 @@ templates = Jinja2Templates(directory=Path(__file__).parent.parent / "frontend" 
 
 @router.get("/")
 async def rooms(request: Request):
-    """Все доступные комнаты для бронирования"""
+    """Страница для бронирования комнат"""
     token = request.cookies.get("access_token")
     if token is None:
         raise HTTPException(status_code=401, detail="Пользователь не авторизован")
