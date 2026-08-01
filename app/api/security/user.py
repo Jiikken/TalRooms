@@ -55,3 +55,11 @@ async def check_owner(request: Request, user_id: int, session: AsyncSession = De
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="У Вас нет доступа к этой странице")
     return UserResponse(**current_user)
+
+async def get_current_user(request: Request, session: AsyncSession = Depends(get_db)):
+    """Получение текущего пользователя"""
+    token = request.cookies.get("access_token")
+    user_id = get_info_from_access_token(token, "user_id")
+    current_user = await get_user_info(session, user_id=user_id)
+
+    return current_user
