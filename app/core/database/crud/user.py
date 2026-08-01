@@ -110,7 +110,7 @@ async def update_user_activity(session: AsyncSession, email: str, last_login: st
         update(User)
         .where(User.email.ilike(email))
         .values(**values)
-        .returning(User.id, User.first_name, User.last_name, User.is_active, User.last_login, User.role)
+        .returning(User.id, User.first_name, User.last_name, User.email, User.is_active, User.last_login, User.role)
     )
 
     result = await session.execute(stmt)
@@ -124,9 +124,10 @@ async def update_user_activity(session: AsyncSession, email: str, last_login: st
         "id": row[0],
         "first_name": row[1],
         "last_name": row[2],
-        "is_active": row[3],
-        "last_login": row[4],
-        "access_lvl": row[5]
+        "email": row[3],
+        "is_active": row[4],
+        "last_login": row[5],
+        "access_lvl": row[6]
     }
 
 async def is_room_available(session: AsyncSession, room_id: int, start: datetime, end: datetime) -> bool:
