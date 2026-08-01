@@ -47,7 +47,13 @@ def formating_date(format_date: datetime) -> str:
     return f"{format_date.day} {months[format_date.month - 1]} {format_date.year}"
 
 async def check_owner(request: Request, user_id: int, session: AsyncSession = Depends(get_db)):
-    token = request.cookies.get("access_token_reg")
+    """Проверка прав на просмотр страницы"""
+    token = None
+    if request.cookies.get("access_token_reg"):
+        token = request.cookies.get("access_token_reg")
+    if request.cookies.get("access_token"):
+        token = request.cookies.get("access_token")
+
     current_user_id = get_info_from_access_token(token, "user_id")
     current_user = await get_user_info(session, user_id=current_user_id)
 
