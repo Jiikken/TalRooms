@@ -169,7 +169,7 @@ form.addEventListener('submit', async function(e) {
         flashManager.success("Аккаунт успешно зарегистрирован!");
 
         setTimeout(() => {
-          window.location.href = `/auth/success-register/${userId}`;
+          window.location.href = `/auth/success-register`;
         }, 1500);
     } else {
       flashManager.error('Пользователь с таким email уже существует');

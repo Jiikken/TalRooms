@@ -41,7 +41,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         flashManager.success("Авторизация успешна!");
 
         setTimeout(() => {
-          window.location.href = `/auth/success-login/${userId}`;
+          window.location.href = `/auth/success-login`;
         }, 1500);
 
       } else {
