@@ -60,7 +60,7 @@
 
 async function removeToBookingPage(roomId) {
   try {
-        const userIsAuthResponse = await fetch('/user/check-auth');
+        const userIsAuthResponse = await fetch('/user/check/auth');
         const userIsAuthData = await userIsAuthResponse.json();
         if (!userIsAuthData.authenticated){
             flashManager.info('Для начала нужно авторизоваться');

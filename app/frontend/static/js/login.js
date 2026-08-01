@@ -18,7 +18,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const resultCheckUser = await responseCheckUser.json();
 
     if (resultCheckUser.exists) {
-      const responsePasswordCheck = await fetch('/user/check-password', {
+      const responsePasswordCheck = await fetch('/user/check/password', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ email, password })
