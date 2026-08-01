@@ -15,8 +15,8 @@ class UserResponse(BaseModel):
     last_name: str
     email: EmailStr
     access_lvl: int = None
-    last_login: datetime = None
-    created: datetime
+    last_login: str = None
+    created: datetime = None
 
     class Config:
         from_attributes = True
