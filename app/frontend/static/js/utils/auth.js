@@ -21,7 +21,7 @@ async function createAuthButton(type) {
     const userId = await fetch('/user/get/id');
     const dataUser = await userId.json();
 
-    link.href = '/user/profile/' + dataUser.user_id;
+    link.href = '/user/my';
     link.style.textDecoration = 'none';
 
     const button = document.createElement('button');
@@ -38,7 +38,7 @@ let authButton = document.getElementById('authButton');
 let authButtonText = document.getElementById('authButtonText');
 
 async function updateAuthButton() {
-  const response = await fetch('/user/check-auth');
+  const response = await fetch('/user/check/auth');
   const data = await response.json();
 
   if (data.authenticated) {
