@@ -134,7 +134,7 @@ async function handleSubmit(event, roomId, date) {
     const userId = userIdData.user_id;
 
     setTimeout(() => {
-      window.location.href = `/user/profile/${userId}/booked-room/${newRoomId}?date=${newDate}&admin_id=${adminId}`;
+      window.location.href = `/booking-rooms/booked-room/${newRoomId}?date=${newDate}&admin_id=${adminId}`;
     }, 1500);
 
   } catch (error) {

@@ -40,7 +40,7 @@ async function renderBookingDetail(booking, roomId) {
     </div>
 
     <div class="action-buttons">
-      <button class="btn-action primary" onclick="window.location.href = '/user/profile/${adminId}/edit-booked-room/${roomId}?date=${dateService}'">
+      <button class="btn-action primary" onclick="window.location.href = '/booking-rooms/edit-booked-room/${roomId}?date=${dateService}'">
         <i class="fas fa-edit"></i> Редактировать
       </button>
       <button class="btn-action danger" onclick="handlerDeleteBookedRoom(${booking.id}, '${dateService}')">

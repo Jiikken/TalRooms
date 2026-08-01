@@ -40,7 +40,7 @@ async function editBooking(roomId, date) {
   const userIdData = await userIdResponse.json();
   const userId = userIdData.user_id;
 
-  window.location.href = `/user/profile/${userId}/edit-booked-room/${roomId}?date=${date}`;
+  window.location.href = `/booking-rooms/edit-booked-room/${roomId}?date=${date}`;
 }
 
 async function deleteBooking(roomId, date) {

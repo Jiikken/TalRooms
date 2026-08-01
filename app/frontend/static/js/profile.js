@@ -89,7 +89,7 @@ function renderBookings(bookings, userId) {
         </div>
         <div style="margin-top: 0.5rem; display: flex; justify-content: flex-end;">
           <div id="bookContainer" style="display: flex; gap: 6px; align-items: center;">
-            <a href="/user/profile/${userId}/booked-room/${booking.room.id}?date=${date}&admin_id=${booking.booked_by_id}" style="text-decoration: none;">
+            <a href="/booking-rooms/booked-room/${booking.room.id}?date=${date}&admin_id=${booking.booked_by_id}" style="text-decoration: none;">
               <button class="btn-booking-small">
                 <i class="fas fa-calendar-plus"></i> Детали
               </button>
