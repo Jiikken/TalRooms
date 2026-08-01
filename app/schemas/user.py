@@ -14,7 +14,13 @@ class UserResponse(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
+    access_lvl: int = None
+    last_login: datetime = None
     created: datetime
 
     class Config:
         from_attributes = True
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
