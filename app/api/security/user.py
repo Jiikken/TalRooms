@@ -28,15 +28,15 @@ def exists_user(user: dict) -> bool:
         return False
     return True
 
-def exists_access_to_view(booked_room: dict, current_user: dict, user_id: int) -> bool:
+def exists_access_to_view(booked_room: dict, current_user: UserResponse, user_id: int) -> bool:
     """Проверка на наличие прав для просмотра у пользователя"""
     if booked_room is None:
         return False
 
-    if current_user["access_lvl"] <= 1 and booked_room["booked_by_id"] != user_id and booked_room["requested_by_id"] != user_id:
+    if current_user.access_lvl <= 1 and booked_room["booked_by_id"] != user_id and booked_room["requested_by_id"] != user_id:
         return False
 
-    elif current_user["id"] != user_id and current_user["access_lvl"] <= 1:
+    elif current_user.id != user_id and current_user.access_lvl <= 1:
         return False
     return True
 

@@ -128,33 +128,24 @@ async def all_booking_rooms(request: Request, user_id: int, session: AsyncSessio
     return {"booking_rooms": booking_list}
 
 @router.get("/booked-room/{room_id}")
-async def booked_room(request: Request, user_id: int, room_id: int, date: str | None = None, admin_id: int | None = None, session: AsyncSession = Depends(get_db)):
+async def booked_room(request: Request, room_id: int, user: UserResponse = Depends(get_current_user), date: str | None = None, admin_id: int | None = None, session: AsyncSession = Depends(get_db)):
     """Страница деталей бронированной комнаты"""
-    token = request.cookies.get("access_token")
-
-    email = get_info_from_access_token(token, "email")
-
-    info_user = await get_user_by_id_bd(session, user_id)
-    current_user = await get_user_info(session, email)
-
     format_date = datetime.strptime(date, "%Y-%m-%d")
     _booked_room = await get_booked_room_by_room_id_and_date(session, room_id, format_date)
+
     today_date = datetime.now().strftime("%d.%m.%Y")
     result_date = formating_date(format_date)
 
-    if exists_token(token) is False:
-        raise HTTPException(status_code=401, detail="Пользователь не авторизован")
-
     if (exists_parameters(room_id, date, admin_id) is False
-            or exists_user(info_user) is False
-            or exists_access_to_view(_booked_room, current_user, user_id) is False):
+            or exists_user(dict(user)) is False
+            or exists_access_to_view(_booked_room, user, user.id) is False):
         raise HTTPException(status_code=404, detail="Что-то пошло не по плану")
 
     return templates.TemplateResponse(request, "booked_room.html", context={"booking_date": result_date,
                                                                             "today_date": today_date,
                                                                             "booked_by_id": admin_id,
                                                                             "booking_date_service": date,
-                                                                            "user_id": info_user.get("id")})
+                                                                            "user_id": user.id})
 
 @router.get("/edit-booked-room/{room_id}")
 async def edit_booked_room(request: Request, date: str, room_id: int):
