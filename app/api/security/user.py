@@ -68,4 +68,4 @@ async def get_current_user(request: Request, session: AsyncSession = Depends(get
     user_id = get_info_from_access_token(token, "user_id")
     current_user = await get_user_info(session, user_id=user_id)
 
-    return current_user
+    return UserResponse.model_validate(current_user)
