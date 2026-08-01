@@ -1,17 +1,13 @@
-from datetime import datetime
 from pathlib import Path
 
-from fastapi import APIRouter, Request, Depends, HTTPException, Body
+from fastapi import APIRouter, Body
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.database.connect import get_db
-from app.core.database.crud.rooms_booking import get_room_by_id, get_booked_room_by_room_id_and_date
-from app.core.database.crud.user import get_user_info, get_user_by_id_bd, get_hashed_password
-from app.core.database.security import exists_user as exists_user_db
-from app.core.security.JWT import get_info_from_access_token
-from app.core.security.password import check_password
 from app.api.security.user import *
+from app.core.database.crud.rooms_booking import get_booked_room_by_room_id_and_date
+from app.core.database.crud.user import get_user_by_id_bd, get_hashed_password
+from app.core.database.security import exists_user as exists_user_db
+from app.core.security.password import check_password
 
 router = APIRouter(prefix="/user", tags=["User"])
 
@@ -102,39 +98,25 @@ async def edit_booked_room(request: Request, date: str, room_id: int):
     return templates.TemplateResponse(request, "edit_booked_room.html", context={"room_id": room_id,
                                                                                  "date": date})
 
-@router.get("/profile/{user_id}")
-async def profile(request: Request, user_id: int, session: AsyncSession = Depends(get_db)):
+@router.get("/my")
+async def profile(request: Request, user: UserResponse = Depends(get_current_user)):
     """Страница профиля пользователя"""
-    token = request.cookies.get("access_token")
+    access_lvl = user.access_lvl
+    date_register = user.created
 
-    if not token:
-        raise HTTPException(status_code=401, detail="Пользователь не авторизован")
-
-    email = get_info_from_access_token(token, "email")
-
-    info_user = await get_user_by_id_bd(session, user_id)
-    if not info_user:
-        raise HTTPException(status_code=404, detail="Пользователь не найден")
-
-    current_user = await get_user_info(session, email)
-    if current_user["id"] != user_id:
-        raise HTTPException(status_code=404, detail="Страница не найдена")
-
-    access_lvl = get_info_from_access_token(token, "role")
-    date_register = info_user.get("created")
     formed_date_register = date_register.strftime("%Y.%m.%d %H:%M")
     today_date = datetime.now().strftime("%d.%m.%Y")
 
     role = "Пользователь" if access_lvl == 0 else "Сотрудник" if access_lvl == 1 else "Администратор"
-    active = "Активен" if info_user.get("is_active") is True else "Не активен"
+    active = "Активен"
 
     return templates.TemplateResponse(request,
                                       "profile.html",
                                       {"role": role,
                                        "is_active": active,
-                                       "first_name": info_user.get("first_name"),
-                                       "last_name": info_user.get("last_name"),
-                                       "email": email,
+                                       "first_name": user.first_name,
+                                       "last_name": user.last_name,
+                                       "email": user.email,
                                        "date_register": formed_date_register,
                                        "today_date": today_date
                                        })
