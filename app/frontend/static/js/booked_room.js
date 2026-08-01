@@ -62,7 +62,7 @@ async function handlerDeleteBookedRoom(roomId, date) {
         const userIdResponse = await fetch('/user/get/id');
         const userId = await userIdResponse.json();
 
-        window.location.href = `/user/profile/${userId.user_id}`;
+        window.location.href = `/user/my`;
         return;
     }
     flashManager.error('Что-то пошло не по плану');
