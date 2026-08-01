@@ -46,7 +46,7 @@ def formating_date(format_date: datetime) -> str:
               "июля", "августа", "сентября", "октября", "ноября", "декабря"]
     return f"{format_date.day} {months[format_date.month - 1]} {format_date.year}"
 
-async def check_owner(request: Request, user_id: int, session: AsyncSession = Depends(get_db)):
+async def check_owner(request: Request, session: AsyncSession = Depends(get_db)):
     """Проверка прав на просмотр страницы"""
     token = None
     if request.cookies.get("access_token_reg"):
@@ -57,9 +57,6 @@ async def check_owner(request: Request, user_id: int, session: AsyncSession = De
     current_user_id = get_info_from_access_token(token, "user_id")
     current_user = await get_user_info(session, user_id=current_user_id)
 
-    if current_user_id != user_id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                            detail="У Вас нет доступа к этой странице")
     return UserResponse(**current_user)
 
 async def get_current_user(request: Request, session: AsyncSession = Depends(get_db)):
