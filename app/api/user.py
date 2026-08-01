@@ -38,7 +38,7 @@ async def check_exists_user(session: AsyncSession = Depends(get_db), email: str 
     exists = await exists_user_db(session, email)
     return {"exists": exists}
 
-@router.get("/check-auth")
+@router.get("/check/auth")
 async def check_auth_user(request: Request):
     """Проверка пользователя на вход"""
     token = request.cookies.get("access_token")
@@ -46,7 +46,7 @@ async def check_auth_user(request: Request):
         return {"authenticated": True}
     return {"authenticated": False}
 
-@router.post("/check-password")
+@router.post("/check/password")
 async def check_password_user(session: AsyncSession = Depends(get_db), email: str = Body(...), password: bytes = Body(...)):
     """Проверка правильности пароля"""
     hashed_password = await get_hashed_password(session, email)
