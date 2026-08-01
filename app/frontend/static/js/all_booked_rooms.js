@@ -3,37 +3,46 @@ async function renderBookings(bookings, filter = 'all') {
 
   const total = bookings.length;
 
+  const bookingsWithEmployees = await Promise.all(bookings.map(async (booking) => {
+      const response = await fetch('/user/get/user-by-id/' + booking.booked_by_id);
+      const employeeData = await response.json();
+      return {
+          ...booking,
+          employeeName: `${employeeData.first_name} ${employeeData.last_name}`
+      };
+  }));
+
   container.innerHTML = `
-    <div class="stats-bar">
-      <span class="stat-item"><i class="fas fa-calendar-check"></i> Всего: <span class="number">${total}</span></span>
-      ${filter !== 'all' ? `<span class="stat-item" style="margin-left: auto;"><i class="fas fa-filter"></i> Фильтр: ${filter === 'upcoming' ? 'Предстоят' : filter === 'past' ? 'Завершены' : 'Отменены'}</span>` : ''}
-    </div>
-    ${bookings.map(booking => {
-      const dateAndTime = booking.date;
-      const date = dateAndTime.split('T')[0]
-      return `
-        <div class="booking-item" data-id="${booking.id}">
-          <div class="booking-info">
-            <span class="room"><i class="fas fa-door-open"></i> ${booking.room.name_room}</span>
-            <span class="meta"><i class="far fa-calendar-alt"></i> ${date}</span>
-            <span class="meta"><i class="far fa-clock"></i> ${booking.room.start_time} – ${booking.room.end_time} UTC</span>
-          </div>
-          <div class="booking-actions">
-            <button class="btn-action-icon edit" onclick="editBooking('${booking.room_id}', '${date}')" title="Редактировать">
-              <i class="fas fa-pen"></i>
-            </button>
-            <button class="btn-action-icon delete" onclick="deleteBooking('${booking.room_id}', '${date}')" title="Удалить">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-      `;
-    }).join('')}
+      <div class="stats-bar">
+          <span class="stat-item"><i class="fas fa-calendar-check"></i> Всего: <span class="number">${total}</span></span>
+          ${filter !== 'all' ? `<span class="stat-item" style="margin-left: auto;"><i class="fas fa-filter"></i> Фильтр: ${filter === 'upcoming' ? 'Предстоят' : filter === 'past' ? 'Завершены' : 'Отменены'}</span>` : ''}
+      </div>
+      ${bookingsWithEmployees.map(booking => {
+          const date = booking.date.split('T')[0];
+          return `
+              <div class="booking-item" data-id="${booking.id}">
+                  <div class="booking-info">
+                      <span class="room"><i class="fas fa-door-open"></i> ${booking.room.name_room}</span>
+                      <span class="room"><i class="fas fa-user"></i> Сотрудник: ${booking.employeeName}</span>
+                      <span class="meta"><i class="far fa-calendar-alt"></i> ${date}</span>
+                      <span class="meta"><i class="far fa-clock"></i> ${booking.room.start_time} – ${booking.room.end_time} UTC</span>
+                  </div>
+                  <div class="booking-actions">
+                      <button class="btn-action-icon edit" onclick="editBooking('${booking.room_id}', '${date}')" title="Редактировать">
+                          <i class="fas fa-pen"></i>
+                      </button>
+                      <button class="btn-action-icon delete" onclick="deleteBooking('${booking.room_id}', '${date}')" title="Удалить">
+                          <i class="fas fa-trash"></i>
+                      </button>
+                  </div>
+              </div>
+          `;
+      }).join('')}
   `;
 
-  container.style.display = 'block';
-  document.getElementById('skeletonLoader').style.display = 'none';
-}
+    container.style.display = 'block';
+    document.getElementById('skeletonLoader').style.display = 'none';
+  }
 
 async function editBooking(roomId, date) {
   const userIdResponse = await fetch(`/user/get/id`);
