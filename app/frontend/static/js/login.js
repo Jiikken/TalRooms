@@ -28,12 +28,22 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 
       if (resultPasswordCheck) {
         const response = await fetch('/auth/login-user', {
-           method: 'POST',
-           headers: {
-             'Content-Type': 'application/json',
-           },
-           body: JSON.stringify({email})
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({email})
         });
+
+        const responseData = await response.json();
+        const userId = responseData.id;
+
+        flashManager.success("Авторизация успешна!");
+
+        setTimeout(() => {
+          window.location.href = `/auth/success-login/${userId}`;
+        }, 1500);
+
       } else {
         flashManager.error("Неверный пароль");
       }
