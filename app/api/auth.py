@@ -8,6 +8,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.security.cookies import update_tokens_login
 from app.api.security.user import check_owner
 from app.core.database.connect import get_db
 from app.core.database.crud.user import create_user, update_user_activity
@@ -58,25 +59,7 @@ async def login_user(request: Request, response: Response, user_login: UserLogin
     user_update = await update_user_activity(session, str(user_login.email), is_active=True, last_login=utctime_and_date_now)
     user = UserResponse.model_validate(user_update)
 
-    token = create_access_token({
-        "email": user.email,
-        "user_id": user.id,
-        "role": user.access_lvl
-    })
-
-    if request.cookies.get("access_token"):
-        response.delete_cookie("access_token")
-
-    response.set_cookie(
-        key="access_token",
-        value=token,
-        httponly=True,
-        secure=False,
-        samesite="lax",
-        max_age=1800,
-        path="/"
-    )
-    response.delete_cookie("access_token_reg")
+    update_tokens_login(request, response, user)
 
     return templates.TemplateResponse(request,
                                       "success_login.html",
