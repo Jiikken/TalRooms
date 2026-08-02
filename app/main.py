@@ -10,6 +10,7 @@ from fastapi.templating import Jinja2Templates
 
 from app.api import auth, user, booking_rooms
 from app.core.database.connect import init_db, engine
+from app.services.date import get_today_date_ymd, get_today_date_dmy
 
 
 @asynccontextmanager
@@ -26,7 +27,7 @@ templates = Jinja2Templates(directory=Path(__file__).parent / "frontend" / "temp
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """Главная страница приложения"""
-    today_date = datetime.now().strftime("%d.%m.%Y")
+    today_date = get_today_date_dmy()
     return templates.TemplateResponse(request, "index.html", {"today_date": today_date})
 
 @app.get("/ping")
@@ -37,7 +38,7 @@ async def ping():
 @app.get("/get/today")
 async def get_date():
     """Получение сегодняшней даты"""
-    today_date = datetime.now().strftime("%Y-%m-%d")
+    today_date = get_today_date_ymd()
     return {"today_date": today_date}
 
 app.include_router(auth.router)
