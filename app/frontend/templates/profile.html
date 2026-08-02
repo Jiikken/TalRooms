@@ -52,7 +52,9 @@
       </div>
       <div class="profile-actions">
         <div id="editContainer" style="display: flex; gap: 10px; align-items: center;">
-          <button class="btn-edit"><i class="fas fa-pen"></i> Редактировать</button>
+          <button class="btn-edit" onclick="flashManager.info('Редактирование профиля')">
+            <i class="fas fa-pen"></i> Редактировать
+          </button>
           <button class="btn-danger" onclick="handleLogout()">
             <i class="fas fa-sign-out-alt"></i> Выйти
           </button>
