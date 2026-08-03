@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from fastapi import Request, HTTPException, status
+from fastapi import Request
 from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -39,12 +39,6 @@ def exists_access_to_view(booked_room: dict, current_user: UserResponse, user_id
     elif current_user.id != user_id and current_user.access_lvl <= 1:
         return False
     return True
-
-def formating_date(format_date: datetime) -> str:
-    """Формирование даты для HTML"""
-    months = ["января", "февраля", "марта", "апреля", "мая", "июня",
-              "июля", "августа", "сентября", "октября", "ноября", "декабря"]
-    return f"{format_date.day} {months[format_date.month - 1]} {format_date.year}"
 
 async def check_owner(request: Request, session: AsyncSession = Depends(get_db)):
     """Проверка прав на просмотр страницы"""

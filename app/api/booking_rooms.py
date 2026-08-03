@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, HTTPException
 from fastapi import Response
 from fastapi.templating import Jinja2Templates
 
@@ -9,6 +9,7 @@ from app.core.database.crud.rooms import get_all_rooms
 from app.core.database.crud.rooms_booking import create_booking, get_user_booking, get_room_by_id, \
     delete_booked_room, update_booked_room, get_all_booked_rooms
 from app.core.database.crud.rooms_booking import get_booked_room_by_room_id_and_date
+from app.services.date import formating_date
 
 router = APIRouter(prefix="/booking-rooms")
 
