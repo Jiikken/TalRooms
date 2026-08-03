@@ -30,7 +30,7 @@ def _set_cookies(response: Response, token: str):
         path="/"
     )
 
-def update_tokens_login(request: Request, response: Response, user: UserResponse) -> bool:
+def update_tokens_login(request: Request, response: Response, user: UserResponse):
     """Обновление JWT токенов при авторизации"""
     token = _create_token(user)
     _delete_cookies(request, response)
