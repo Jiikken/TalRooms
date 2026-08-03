@@ -30,15 +30,16 @@ def exists_user(user: dict) -> bool:
 
 def exists_access_to_view(booked_room: dict, current_user: UserResponse, user_id: int) -> bool:
     """Проверка на наличие прав для просмотра у пользователя"""
-    if booked_room is None:
+    if booked_room is None or current_user is None or user_id is None:
         return False
 
-    if current_user.access_lvl <= 1 and booked_room["booked_by_id"] != user_id and booked_room["requested_by_id"] != user_id:
-        return False
+    if current_user.access_lvl > 1:
+        return True
 
-    elif current_user.id != user_id and current_user.access_lvl <= 1:
-        return False
-    return True
+    if booked_room["booked_by_id"] == user_id or booked_room["requested_by_id"] == user_id:
+        return True
+
+    return False
 
 async def check_owner(request: Request, session: AsyncSession = Depends(get_db)):
     """Проверка прав на просмотр страницы"""
