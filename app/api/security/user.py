@@ -43,11 +43,12 @@ def exists_access_to_view(booked_room: dict, current_user: UserResponse, user_id
 
 async def check_owner(request: Request, session: AsyncSession = Depends(get_db)):
     """Проверка прав на просмотр страницы"""
-    token = None
-    if request.cookies.get("access_token_reg"):
-        token = request.cookies.get("access_token_reg")
     if request.cookies.get("access_token"):
         token = request.cookies.get("access_token")
+    elif request.cookies.get("access_token_reg"):
+        token = request.cookies.get("access_token_reg")
+    else:
+        raise ValueError
 
     current_user_id = get_info_from_access_token(token, "user_id")
     current_user = await get_user_info(session, user_id=current_user_id)
@@ -59,5 +60,7 @@ async def get_current_user(request: Request, session: AsyncSession = Depends(get
     token = request.cookies.get("access_token")
     user_id = get_info_from_access_token(token, "user_id")
     current_user = await get_user_info(session, user_id=user_id)
+    if current_user is None:
+        raise ValueError("Пользователь не найден")
 
     return UserResponse.model_validate(current_user)
