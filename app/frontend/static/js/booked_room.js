@@ -4,8 +4,18 @@ async function renderBookingDetail(booking, roomId) {
   const date = skeletonLoader.dataset.bookingDate || '—';
   const dateService = skeletonLoader.dataset.bookingDateService || '—';
   const adminId = skeletonLoader.dataset.bookedById || '—';
-  const userResponse = await fetch('/user/get/user-by-id/' + adminId);
+
+  const [userResponse, roleResponse] = await Promise.all([
+    fetch('/user/get/user-by-id/' + adminId),
+    fetch('/user/get/role')
+  ]);
+
   const userData = await userResponse.json();
+  const roleData = await roleResponse.json();
+  const userRole = Number(roleData.role) || 0;
+
+  // Проверяем, может ли пользователь редактировать
+  const canEdit = userRole >= 1;
 
   container.innerHTML = `
     <div class="detail-header">
@@ -39,6 +49,7 @@ async function renderBookingDetail(booking, roomId) {
       </div>
     </div>
 
+    ${canEdit ? `
     <div class="action-buttons">
       <button class="btn-action primary" onclick="window.location.href = '/booking-rooms/edit-booked-room/${roomId}?date=${dateService}'">
         <i class="fas fa-edit"></i> Редактировать
@@ -47,6 +58,22 @@ async function renderBookingDetail(booking, roomId) {
         <i class="fas fa-times"></i> Отменить
       </button>
     </div>
+    ` : `
+    <div class="action-buttons action-buttons-locked">
+      <div class="btn-wrapper">
+        <button class="btn-action primary">
+          <i class="fas fa-edit"></i> Редактировать
+        </button>
+        <button class="btn-action danger">
+          <i class="fas fa-times"></i> Отменить
+        </button>
+      </div>
+      <div class="lock-overlay">
+        <i class="fas fa-lock"></i>
+        <span>Редактирование доступно только для сотрудников</span>
+      </div>
+    </div>
+    `}
   `;
 
   skeletonLoader.style.display = 'none';

@@ -154,6 +154,131 @@ body {
   margin: 0 4px;
 }
 
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-action {
+  padding: 10px 24px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-action.primary {
+  background: #2a7de1;
+  color: white;
+  box-shadow: 0 6px 14px rgba(42, 125, 225, 0.2);
+}
+
+.btn-action.primary:hover {
+  background: #1a5fc7;
+  transform: translateY(-2px);
+}
+
+.btn-action.secondary {
+  background: #f2f6fc;
+  color: #1f2a44;
+  border: 1px solid #dae2ed;
+}
+
+.btn-action.secondary:hover {
+  background: #e5ecf5;
+}
+
+.btn-action.danger {
+  background: #fee9e7;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.btn-action.danger:hover {
+  background: #fdd9d6;
+}
+
+/* ===== ЗАБЛОКИРОВАННЫЕ КНОПКИ ===== */
+.action-buttons-locked {
+  position: relative;
+  justify-content: center;
+  min-height: 70px;
+}
+
+.action-buttons-locked .btn-wrapper {
+  display: flex;
+  gap: 1rem;
+  filter: blur(2px) grayscale(0.8);
+  opacity: 0.4;
+  pointer-events: none;
+  user-select: none;
+}
+
+.action-buttons-locked .btn-wrapper .btn-action {
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+
+.action-buttons-locked .btn-wrapper .btn-action.primary {
+  background: #94a3b8;
+}
+
+.action-buttons-locked .btn-wrapper .btn-action.danger {
+  background: #cbd5e1;
+  color: #64748b;
+  border-color: #cbd5e1;
+}
+
+.action-buttons-locked .lock-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  padding: 12px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4a5b6e;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: 2px dashed #cbd5e1;
+  z-index: 10;
+}
+
+.action-buttons-locked .lock-overlay i {
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+
+/* Скелетон загрузки */
+.skeleton {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.skeleton-text {
+  height: 20px;
+  background: #eef3fa;
+  border-radius: 8px;
+  margin: 4px 0;
+}
+
 /* ----- ОСНОВНОЙ КОНТЕНТ ----- */
 .container {
   max-width: 1000px;
