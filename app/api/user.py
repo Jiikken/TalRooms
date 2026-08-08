@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, HTTPException
 from fastapi.templating import Jinja2Templates
 
 from app.api.security.user import *
